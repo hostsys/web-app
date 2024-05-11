@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 255 255 255;
+    --color-secondary: 10 10 10;
+    --color-tertiary: 99 99 99;
+    --prev-color-primary: 99 99 99;
+    --box-color: ;
+    --color-scene: 0 0 0;
+    --cursor-primary: url("../assets/cursor-placeholder.png");
+  }
+  a,
+  button,
+  router-link,
+  input {
+    @apply cursor-active;
+  }
+  a:active,
+  button:active,
+  router-link:active,
+  input:active {
+    @apply cursor-stabbing;
+  }
+  /* *:active
+        :not(a:active, #cover, button:active, router-link:active, input:active, #music-progress) {
+        @apply cursor-stab;
+    } */
+  #contentBody {
+    @apply active:cursor-stab !important;
+  }
+}
+
+* .cursor-animating {
+  /* background-color: white; */
+  -webkit-animation: cursor 0.5s 1;
+  animation: cursor 0.5s 1;
+}
+
+@keyframes spinpop405 {
+  0% {
+    transform: rotate(45deg) scale(100%);
+  }
+  50% {
+    transform: rotate(225deg) scale(120%);
+  }
+  100% {
+    transform: rotate(405deg) scale(100%);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(100%);
+  }
+  50% {
+    transform: scale(110%);
+  }
+  100% {
+    transform: scale(100%);
+  }
+}
+
+.pop:not(:active) {
+  animation: pop 200ms linear forwards;
+}
+
+.spin-on-event {
+  animation: spinpop405 500ms linear forwards;
+}
+
+@-webkit-keyframes cursor {
+  0% {
+    cursor: url(/cursor/cursor-stab.png), auto;
+  }
+  25% {
+    cursor: url(/cursor/cursor-active.png), auto;
+  }
+  50% {
+    cursor: url(/cursor/cursor-stab.png), auto;
+  }
+  75% {
+    cursor: url(/cursor/cursor-active.png), auto;
+  }
+  100% {
+    cursor: url(/cursor/cursor-placeholder.png), auto;
+  }
+}
+
+@keyframes cursor {
+  0% {
+    cursor: url(/cursor/cursor-active-stab.png), auto;
+  }
+  25% {
+    cursor: url(/cursor/cursor-active.png), auto;
+  }
+  50% {
+    cursor: url(/cursor/cursor-stab.png), auto;
+  }
+  75% {
+    cursor: url(/cursor/cursor-active.png), auto;
+  }
+  100% {
+    cursor: url(/cursor/cursor-placeholder.png), auto;
+  }
+}
+
+@font-face {
+  font-family: "Birch Leaf";
+  src: url("/fonts/BirchLeaf.ttf");
+}
+@font-face {
+  font-family: "Perfect DOS";
+  src: url("/fonts/Perfect\ DOS\ VGA\ 437\ Win.ttf");
+}
+@font-face {
+  font-family: "Runescape";
+  src: url("/fonts/runescape_uf.ttf");
+}
+
+/* * {
+} */
+
+/* a,
+button,
+router-link,
+input {
+    @apply cursor-active;
+} */
+
+/* *:active
+    :not(a, button, router-link, input, #cover, .vol-btn, #progress-container)
+    :not(
+        a:active,
+        button:active,
+        router-link:active,
+        input:active,
+        #cover:active,
+        .vol-btn:active,
+        #progress-container:active
+    ) {
+    @apply cursor-stab;
+} */
+
+/* a:active,
+button:active,
+router-link:active,
+input:active,
+#cover:active,
+.vol-btn:active,
+#progress-container:active {
+    @apply cursor-stabbing !important;
+}
+
+a,
+button,
+router-link,
+input,
+#cover,
+.vol-btn,
+#progress-container {
+    @apply cursor-active;
+} */
+
+.no-select {
+  user-select: none;
+}
+
+@keyframes bgcolor {
+  from {
+    background-color: rgb(var(--prev-color-primary));
+    color: rgb(var(--prev-color-primary));
+  }
+  to {
+    background-color: rgb(var(--color-primary));
+    color: rgb(var(--prev-color-primary));
+  }
+}
+
+* {
+  -webkit-font-smoothing: none;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: crisp-edges;
+  scrollbar-width: none;
+}
+
+.router-link-active {
+  /* @apply underline opacity-60; */
+  @apply bg-primary bg-opacity-30;
+}
+
+#bg {
+  margin: 0px;
+  z-index: -2;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+:focus-visible {
+  outline: rgb(var(--color-primary)) dotted 2px;
+  outline-offset: 2px;
+}
+/* .transition-colors-manual {
+  transition-property: color, background-color, border-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms !important;
+  transition-delay: 0ms;
+} */
+
+#volume-0 {
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--color-primary)) 30%,
+    rgb(var(--color-scene))
+  );
+}
+
+#volume-25 {
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--color-primary)) 47.5%,
+    rgb(var(--color-scene))
+  );
+}
+#volume-50 {
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--color-primary)) 65%,
+    rgb(var(--color-scene))
+  );
+}
+#volume-75 {
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--color-primary)) 82.5%,
+    rgb(var(--color-scene))
+  );
+}
+#volume-100 {
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--color-primary)) 100%,
+    rgb(var(--color-scene))
+  );
+}
