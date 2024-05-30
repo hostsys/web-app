@@ -68,22 +68,36 @@ const urlLocationHandler = async () => {
   document.getElementById("view").innerHTML = html;
   document.getElementById("page-header").innerHTML = route.title;
 
+  const existingScripts = document.querySelectorAll("script[dynamic-src]");
+  existingScripts.forEach((script) => {
+    script.parentNode.removeChild(script);
+  });
+
   const scriptTags = new DOMParser()
     .parseFromString(html, "text/html")
     .querySelectorAll("script");
-  scriptTags.forEach((scriptTag) => {
-    const scriptContent = scriptTag.innerHTML;
-    const scriptPath = scriptTag.getAttribute("dynamic-src");
 
-    if (!loadedScripts.has(scriptPath)) {
-      console.log("loaded script for this path not found, creating!");
+  scriptTags.forEach((scriptTag) => {
+    // console.log(scriptTag);
+    const scriptContent = scriptTag.innerHTML;
+
+    // const scriptPath = scriptTag.getAttribute("dynamic-src");
+
+    // console.log("script path: ", scriptPath);
+    // console.log("scripts before creation: ", loadedScripts);
+    if (scriptTag.getAttribute("src") !== "/@vite/client") {
+      // console.log("loaded script for this path not found, creating!");
       const script = document.createElement("script");
       script.textContent = scriptContent;
       script.setAttribute("type", "module");
       script.setAttribute("dynamic-src", location);
       document.head.appendChild(script);
-      scriptTag.remove();
-    }
+      // loadedScripts.add(location);
+      // console.log("scripts after creation: ", loadedScripts);
+      // console.log(scriptTags);
+    } // else {
+    // console.log("loaded script for this path found, NOT creating new one");
+    // }
   });
 };
 

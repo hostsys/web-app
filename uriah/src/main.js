@@ -710,6 +710,7 @@ const playIcon = document.querySelector(".play-icon");
 const pauseIcon = document.querySelector(".pause-icon");
 
 const titleElement = document.getElementById("title");
+const mobileTitle = document.getElementById("mobile-title");
 const coverElements = document.querySelectorAll("#cover, #cover-tooltip");
 
 playBtn.onclick = playPauseSong;
@@ -902,6 +903,7 @@ function loadSong() {
   currentSong.musicFile.volume = volume;
 
   titleElement.innerHTML = currentSong.title;
+  mobileTitle.innerHTML = currentSong.title;
   coverElements.forEach((e) => {
     e.src = currentSong.coverArt;
   });

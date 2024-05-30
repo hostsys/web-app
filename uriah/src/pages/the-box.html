@@ -1,5 +1,3 @@
-<h1>the box!</h1>
-
 <dialog
   id="box-dialog"
   class="z-10 p-4 max-w-md border-2 border-opacity-80 hover:border-opacity-100 border-primary bg-transparent text-primary transition-all"
@@ -9,16 +7,16 @@
     once you change it's color, you will never be able to change it again, and
     your color will never be available again.
   </p>
-  <form method="dialog">
+  <form class="flex place-content-end" method="dialog">
     <button
       id="submit"
-      class="border-2 border-primary px-2 mt-2 cursor-pointer transition-colors-manual"
+      class="border-2 border-primary px-2 mt-2 mr-1 cursor-pointer transition-colors-manual"
     >
       change it
     </button>
     <button
       id="close"
-      class="border-2 border-primary px-2 mt-2 cursor-pointer transition-colors-manual"
+      class="border-2 border-primary px-2 mt-2 cursor-pointer transition-colors-manual place-self-end"
       formnovalidate
     >
       never mind
@@ -26,31 +24,43 @@
   </form>
 </dialog>
 
-<div
-  class="flex h-full flex-col md:items-center md:justify-center md:align-middle"
+<dialog
+  id="notification"
+  class="z-10 p-4 max-w-md border-2 border-opacity-80 hover:border-opacity-100 border-primary bg-transparent text-primary transition-all"
 >
+  <h3 id="notification-text">something went wrong</h3>
+  <form class="flex place-content-end" method="dialog">
+    <button
+      class="border-2 border-primary px-2 mt-2 cursor-pointer transition-colors-manual"
+      id="sorry"
+      formnovalidate
+    >
+      sorry
+    </button>
+  </form>
+</dialog>
+
+<div class="flex flex-col h-full md:justify-center md:items-center">
   <h1 class="text-center text-xl">this is where the box lives</h1>
-  <div class="flex w-full justify-center">
+  <label for="color-picker" class="flex justify-center">
     <div
       id="the-box-box"
-      class="group/box my-16 h-60 w-60 rotate-45 duration-500 transition-all cursor-active bg-box"
+      class="group/box my-16 h-36 w-36 md:h-60 md:w-60 rotate-45 duration-500 transition-all cursor-active bg-box"
     >
       <p
         id="color-label"
         class="sfx m-3 w-min whitespace-nowrap bg-scene px-2 opacity-0 group-hover/box:opacity-80"
       ></p>
     </div>
-  </div>
-  <input id="color-picker" type="color" class="absolute invisible" />
+  </label>
+  <input id="color-picker" type="color" class="absolute opacity-0" />
   <p id="box-body" class="text-center">
-    hello, ipAddress of locationData . <br />
+    hello, ipAddress of locationData. <br />
     you may change the color of the box, as may anyone else. <br />
     if they change it, you will know, as will they if you do. <br />
     you may only change the color of the box once, and any color chosen will
     never be available again.
   </p>
-
-  <div class="transition-all opacity-80 hover:opacity-100" id="alpha"></div>
 </div>
 
 <style>
@@ -64,29 +74,6 @@
     left: 0;
     /* z-index: 10; */
   }
-
-  #alpha {
-    /* background-image: url('https://flaticons.net/icon.php?slug_category=education&slug_icon=alpha');
-    background-size: 100% 100%;
-    mask-image: url('https://flaticons.net/icon.php?slug_category=education&slug_icon=alpha');
-    background-color: blue;
-    mask-size: 100% 100%;
-    background-blend-mode: multiply;
-    display: inline-block; */
-    width: 200px;
-    image-rendering: pixelated;
-    height: 200px;
-    background-image: url("../assets/star-texture.png");
-    background-size: cover;
-    -webkit-mask-image: url("../assets/star-texture.png");
-    -webkit-mask-mode: alpha;
-    -webkit-mask-size: cover;
-    mask-image: url("../assets/star-texture.png");
-    mask-mode: alpha;
-    mask-size: cover;
-    background-blend-mode: multiply;
-    background-color: rgb(var(--color-primary));
-  }
 </style>
 
 <script>
@@ -95,7 +82,11 @@
   const modal = document.getElementById("box-dialog");
   const close = document.getElementById("close");
   const submit = document.getElementById("submit");
+  const sorry = document.getElementById("sorry");
   const colorLabel = document.getElementById("color-label");
+
+  const notification = document.getElementById("notification");
+  const notificationText = document.getElementById("notification-text");
 
   // color picker in box
   const view = document.querySelector("#view");
@@ -107,31 +98,23 @@
     modal.showModal();
   });
 
+  sorry.addEventListener("click", () => {
+    sfx("nav");
+  });
+
   close.addEventListener("click", () => {
     sfx("nav");
   });
 
   submit.addEventListener("click", () => {
-    sfx("click");
-    theBox.classList.add("spin-on-event");
-    updateBoxColor(colorPicker.value);
     postBox();
-    setTimeout(function () {
-      theBox.classList.remove("spin-on-event");
-    }, 1000);
+    sfx("nav");
+    console.log("submit event fired");
   });
-
+  /* 
   theBox.addEventListener("click", () => {
     colorPicker.click();
-  });
-
-  // let ipAddress = "";
-  // let locationData = "";
-  // let coords = "";
-  // let token = "";
-  // let dimensions = "";
-
-  async function postBox() {
+  }) */ async function postBox() {
     const locationData = await fetchLocationData();
 
     const data = {
@@ -157,6 +140,17 @@
 
     const responseJSON = await response.json();
     console.log(responseJSON);
+    if (responseJSON.status == "OK") {
+      sfx("click");
+      theBox.classList.add("spin-on-event");
+      updateBoxColor(colorPicker.value);
+      setTimeout(function () {
+        theBox.classList.remove("spin-on-event");
+      }, 1000);
+    } else {
+      notificationText.innerHTML = responseJSON.status;
+      notification.showModal();
+    }
   }
 
   function convertHexToRGB(color) {
@@ -241,7 +235,7 @@
   }
 
   function generateToken() {
-    let token;
+    let token = "";
     const chars =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     // let token = "";
@@ -249,25 +243,25 @@
     for (var i = 0; i < n; i++) {
       token += chars[Math.floor(Math.random() * chars.length)];
     }
-    token = token;
+    // token = token;
 
     if (localStorage.getItem("token") == null) {
       localStorage.setItem("token", token);
-      printToken();
+      // printToken();
       return token;
     } else {
-      printToken();
+      // printToken();
       return localStorage.getItem("token");
     }
 
-    function printToken() {
-      setTimeout(() => {
-        console.log("token found: " + localStorage.getItem("token"));
-        console.log(
-          "your token is one of " + Math.pow(chars.length, n).toLocaleString()
-        );
-      }, 2000);
-    }
+    //   function printToken() {
+    //     setTimeout(() => {
+    //       console.log("token found: " + localStorage.getItem("token"));
+    //       console.log(
+    //         "your token is one of " + Math.pow(chars.length, n).toLocaleString()
+    //       );
+    //     }, 2000);
+    //   }
   }
 
   function getDimensions() {

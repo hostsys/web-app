@@ -25,27 +25,27 @@
         class="fixed left-8 top-2 rounded-sm border-2 border-primary border-opacity-80 bg-scene px-2 group-hover:border-opacity-100 md:left-10"
       >
       <script>
-    const routeBox = document.getElementById('page-header');
-    routeBox.innerHTML = window.location.pathname;
+        const routeBox = document.getElementById('page-header');
+        routeBox.innerHTML = window.location.pathname;
 
-    // Update route content on popstate event (page navigation)
-    window.onpopstate = () => {
-      routeBox.innerHTML = window.location.pathname;
-    };
+        // Update route content on popstate event (page navigation)
+        window.onpopstate = () => {
+        routeBox.innerHTML = window.location.pathname;
+      };
       </script>
       </div>
       <div
         id="percent"
-        class="rounded-xs fixed right-8 top-8 z-10 w-20 bg-primary pt-1 text-center text-scene transition-all duration-300 md:right-10 md:top-10"
+        class="rounded-xs text-sm fixed right-6 top-6 z-10 w-16 md:w-16 bg-primary pt-1 text-center text-scene transition-all duration-300 md:right-10 md:top-10"
       >
         scroll
       </div>
-      <div id="view" />
+      <div class="h-full" id="view"></div>
     </div>
   </div>
     <!-- <NavMenu /> -->
     <nav-menu id="header"
-    class="flex select-none items-center justify-center transition-colors ease-in-out"
+    class="flex max-h-24 md:max-h-max select-none items-center justify-center transition-colors ease-in-out "
     ></nav-menu>
     <!-- <div
       id="header"
@@ -81,16 +81,16 @@
                 id="cover"
                 class="cursor-active active:cursor-stabbing"
             />
-            <!-- <img
+            <img
                 id="cover-tooltip"
                 src="https://media.tenor.com/kxefu8OQcD8AAAAC/loli-anime.gif"
                 class="absolute left-[calc(50%-2px)] z-10 hidden h-full rounded-sm border-[0.5px] border-primary group-hover/tooltip:top-[-160%] group-hover/tooltip:block group-hover/tooltip:scale-[200%]"
-            /> -->
+            /> 
         </div>
-        <div id="music-container-inner" class="grid w-full grid-flow-col grid-cols-7 grid-rows-3">
+        <div id="music-container-inner" class="grid w-full grid-flow-col max-md:grid-cols-6 grid-cols-7 grid-rows-3">
             <div
                 id="volume-container"
-                class="no-select col-span-1 row-span-1 flex w-full cursor-active border-b-2 border-l-2 border-primary border-opacity-80 p-1 text-sm text-secondary transition-colors duration-300 active:cursor-stabbing group-hover/container:border-opacity-100"
+                class="no-select col-span-1 max-md:hidden row-span-1 flex w-full cursor-active border-b-2 border-l-2 border-primary border-opacity-80 p-1 text-sm text-secondary transition-colors duration-300 active:cursor-stabbing group-hover/container:border-opacity-100"
             >
                 <button
                     id="volume-0"
@@ -127,7 +127,7 @@
                     <p class="decoration-secondary decoration-double decoration-2 underline-offset-2" >100%</p>
                 </button>
             </div>
-            <div id="music-info" class="col-span-1 row-span-2 flex flex-col justify-center pl-1">
+            <div id="music-info" class="col-span-1 max-md:hidden row-span-2 flex flex-col justify-center pl-1">
                 <div id="title" ref="title" class="md:text-md text-nowrap text-sm">
                     {{ songsList[index].title }}
                 </div>
@@ -140,8 +140,8 @@
                 <div
                     @mouseup="progressActive"
                     id="progress-container"
-                    class="w-full border-b-2 border-l-2 border-primary border-opacity-80 p-1 duration-300 group-hover/container:border-opacity-100"
-                >
+                    class="w-full relative border-b-2 border-l-2 border-primary border-opacity-80 p-1 duration-300 group-hover/container:border-opacity-100"
+                ><p id="mobile-title" class="absolute md:hidden top-0.5 left-1.5 text-sm text-scene w-full text-center">awaiting title</p>
                     <div
                         id="progress"
                         class="h-full w-0 bg-primary bg-fixed transition-all duration-150 ease-in"
@@ -258,10 +258,10 @@
 const getBoxes = async () => {
   const boxes = await fetch("https://uriah.website/wp-json/hs/v1/boxes").then((response) => response.json());
 
-  const latestBox = boxes[0].hex
+  const latestBox = boxes[0]?.hex || '#fff'
 
-  console.log(boxes)
-  console.log('the latest box color is: ', latestBox)
+  // console.log(boxes)
+  // console.log('the latest box color is: ', latestBox)
 
   document.documentElement.style.setProperty(
       "--box-color",
@@ -269,6 +269,10 @@ const getBoxes = async () => {
     );
   const boxesFetched = new Event('boxesFetched')
   document.dispatchEvent(boxesFetched)
+
+  setTimeout(() => {
+    getBoxes()
+  },1000)
 }
 
 getBoxes()
