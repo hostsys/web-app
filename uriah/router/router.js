@@ -101,6 +101,15 @@ const urlLocationHandler = async () => {
   });
 };
 
-window.onpopstate = urlLocationHandler;
+if (import.meta.hot) {
+  import.meta.hot.accept(async (newModule) => {
+    // This code will run when Vite detects changes and triggers a hot update
+
+    // Fetch the updated HTML content and update the DOM
+    await urlLocationHandler();
+  });
+}
+
+window.onpopstate = urlLocationHandler();
 window.route = urlRoute;
-urlLocationHandler();
+// urlLocationHandler();

@@ -12,6 +12,9 @@ import "./index.css";
 import axios from "axios";
 import * as THREE from "three";
 import * as TWEEN from "@tweenjs/tween.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+const loader = new GLTFLoader();
 
 // const app = createApp(App);
 
@@ -519,7 +522,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   const eyeBox = document.querySelector("#eyebox");
-  const eyeRenderer = new THREE.WebGLRenderer({ canvas: eyeBox, alpha: true });
+  const eyeRenderer = new THREE.WebGLRenderer({
+    canvas: eyeBox,
+    alpha: true,
+    antialias: false,
+  });
 
   eyeRenderer.setPixelRatio(window.devicePixelRatio * 0.5);
   eyeRenderer.setSize(eyeSizes.width, eyeSizes.height);

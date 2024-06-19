@@ -68,5 +68,8 @@ export function sfx(type) {
   if (type == "click") {
     clickSfx.play();
   }
+  if (type == "enter") {
+    enterSfx.play();
+  }
 }
 // });
