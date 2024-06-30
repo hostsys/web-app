@@ -17,6 +17,7 @@
 
 <script>
   import * as THREE from "../../node_modules/three/build/three.module.js";
+  import * as TWEEN from "../../node_modules/@tweenjs/tween.js";
   import { GLTFLoader } from "../../node_modules/three/examples/jsm/loaders/GLTFLoader.js";
   import { sfx } from "./src/js/sfx.js";
 
@@ -30,7 +31,6 @@
   }
 
   const test = document.getElementById("test");
-
   const sizes = {
     width: 400,
     height: 400,
@@ -42,7 +42,6 @@
   }
 
   const scene = new THREE.Scene();
-
   const camera = new THREE.PerspectiveCamera(
     60,
     sizes.width / sizes.height,
@@ -79,7 +78,7 @@
     }
   );
 
-  const light = new THREE.PointLight(0xffffff, 17);
+  const light = new THREE.PointLight(0xffffff, 20);
   light.castShadow = true;
   light.shadow.camera.far = 10000;
   light.position.y = 15;
@@ -101,26 +100,31 @@
     antialias: false,
   });
   renderer.shadowMapEnabled = true;
-
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(window.devicePixelRatio);
-
   // container.appendChild(renderer.domElement);
   // console.log(renderer.domElement);
 
-  let n = 1;
+  let turningLeft = true;
+  let delta = 0;
+  let interval = 1000 / 120;
 
-  const animate = (n) => {
-    test.innerText = "frames 1" + n;
-    requestAnimationFrame(() => animate(n + 1)); // Correctly schedule the next call
-    // cube.rotation.x += 0.01;
-    // cube.rotation.y += 0.01;
-    if (loadedModel) {
-      // loadedModel.rotation.x += 0.01;
-      loadedModel.rotation.y -= 0.01;
+  const animate = (timestamp) => {
+    if (timestamp - delta > interval) {
+      // cube.rotation.x += 0.01;
+      // cube.rotation.y += 0.01;
+      if (loadedModel) {
+        // loadedModel.rotation.x += 0.01;
+        loadedModel.rotation.y += turningLeft ? -0.01 : 0.01;
+        if (loadedModel.rotation.y <= -1 || loadedModel.rotation.y >= 0.5) {
+          turningLeft = !turningLeft;
+        }
+      }
+      renderer.render(scene, camera);
+      delta = timestamp;
     }
-    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
   };
 
-  animate(n);
+  animate();
 </script>

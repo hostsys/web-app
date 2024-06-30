@@ -12,9 +12,6 @@ import "./index.css";
 import axios from "axios";
 import * as THREE from "three";
 import * as TWEEN from "@tweenjs/tween.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-
-const loader = new GLTFLoader();
 
 // const app = createApp(App);
 
@@ -159,8 +156,24 @@ window.addEventListener("keyup", (upEvent) => {
 
 let ySpeed = 5;
 const ySpeedW = 10;
-const ySpeedS = 3;
+const ySpeedS = 5;
 let speedChangeInProgress = false;
+
+window.addEventListener("controlEvent", (e) => {
+  const directive = e.detail.directive;
+  cameraControls(directive);
+});
+
+function cameraControls(directive) {
+  if (directive === "faster")
+    tweenYSpeed(ySpeedW, 800, TWEEN.Easing.Quartic.In);
+  if (directive === "slower") tweenYSpeed(0.3, 800, TWEEN.Easing.Sinusoidal.In);
+  if (directive === "stop")
+    tweenYSpeed(ySpeedS, 800, TWEEN.Easing.Sinusoidal.InOut);
+  if (directive === "left") tweenYRotation(-yRSpeed);
+  if (directive === "right") tweenYRotation(yRSpeed);
+  if (directive === "stopR") tweenYRotation(0);
+}
 
 document.addEventListener("keydown", (event) => {
   if (event.key.toLowerCase() === "s" && !speedChangeInProgress) {
@@ -418,6 +431,29 @@ const themes = Object.keys(colorThemes);
 let gayMode = false;
 let gayInterval;
 const gaySpeed = 361;
+
+window.addEventListener("colorEvent", (e) => {
+  const directive = e.detail.directive;
+  colorControl(directive);
+});
+
+function colorControl(directive) {
+  switch (directive) {
+    case "next":
+      currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+      const nextTheme = themes[currentThemeIndex];
+      changeTheme(nextTheme);
+      break;
+    case "previous":
+      currentThemeIndex = Math.max(currentThemeIndex - 1, 0);
+      const prevTheme = themes[currentThemeIndex];
+      changeTheme(prevTheme);
+      break;
+    case "rainbow":
+      toggleGayMode();
+      break;
+  }
+}
 
 const shadowElements = document.querySelectorAll("#content, #music-container");
 const shadowClass = "shadow-[0_0_25px]";

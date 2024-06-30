@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/index.css", "./*.html", "./src/pages/*", "./src/main.js"],
+  content: [
+    "./src/index.css",
+    "./*.html",
+    "./src/pages/*",
+    "./src/main.js",
+    "./src/js/*",
+  ],
   theme: {
     fontFamily: {
       hack: ["hack"],

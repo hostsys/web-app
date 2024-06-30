@@ -1,1 +1,100 @@
-<h1>controls go here!</h1>
+<div class="flex w-full items-center justify-center h-full">
+  <div
+    id="controls"
+    class="items-center select-none md:max-h-[50%] md:max-w-[50%] h-full w-full grid gap-2 grid-rows-3 text-primary transition-all duration-300"
+  >
+    <div class="grid gap-2 grid-cols-3 grid-flow-col h-full">
+      <div
+        id="color-previous"
+        class="pop bg-primary/20 flex items-center justify-center h-full w-full"
+      >
+        previous
+      </div>
+      <div
+        id="faster"
+        class="active:opacity-50 opacity-100 bg-primary/20 flex items-center justify-center h-full w-full"
+      >
+        faster
+      </div>
+      <div
+        id="color-next"
+        class="pop bg-primary/20 flex items-center justify-center h-full w-full"
+      >
+        next
+      </div>
+    </div>
+    <div class="grid gap-2 grid-cols-3 grid-flow-col h-full">
+      <div
+        id="left"
+        class="active:opacity-50 opacity-100 bg-primary/20 flex items-center justify-center h-full w-full"
+      >
+        left
+      </div>
+      <div
+        id="color-rainbow"
+        class="pop bg-primary/20 flex items-center justify-center h-full w-full"
+      >
+        rainbow
+      </div>
+      <div
+        id="right"
+        class="active:opacity-50 opacity-100 bg-primary/20 flex items-center justify-center h-full w-full"
+      >
+        right
+      </div>
+    </div>
+    <div class="grid gap-2 grid-cols-3 grid-flow-col h-full">
+      <div id="" class="flex items-center justify-center h-full w-full"></div>
+      <div
+        id="slower"
+        class="bg-primary/20 active:opacity-50 opacity-100 flex items-center justify-center h-full w-full"
+      >
+        slower
+      </div>
+      <div id="" class="flex items-center justify-center h-full w-full"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const createControlEvent = (directive) =>
+    new CustomEvent("controlEvent", { detail: { directive } });
+  const createColorEvent = (directive) =>
+    new CustomEvent("colorEvent", { detail: { directive } });
+
+  const events = {
+    fasterStart: createControlEvent("faster"),
+    stop: createControlEvent("stop"),
+    slowerStart: createControlEvent("slower"),
+    leftStart: createControlEvent("left"),
+    rightStart: createControlEvent("right"),
+    stopR: createControlEvent("stopR"),
+    nextColor: createColorEvent("next"),
+    previousColor: createColorEvent("previous"),
+    rainbow: createColorEvent("rainbow"),
+  };
+
+  const buttons = [
+    { id: "faster", startEvent: events.fasterStart, endEvent: events.stop },
+    { id: "slower", startEvent: events.slowerStart, endEvent: events.stop },
+    { id: "left", startEvent: events.leftStart, endEvent: events.stopR },
+    { id: "right", startEvent: events.rightStart, endEvent: events.stopR },
+    { id: "color-next", startEvent: events.nextColor, endEvent: null },
+    { id: "color-previous", startEvent: events.previousColor, endEvent: null },
+    { id: "color-rainbow", startEvent: events.rainbow, endEvent: null },
+  ];
+
+  buttons.forEach(({ id, startEvent, endEvent }) => {
+    const button = document.getElementById(id);
+    if (id.includes("color-")) {
+      button.addEventListener("click", () => {
+        window.dispatchEvent(startEvent);
+      });
+    } else {
+      button.addEventListener("touchstart", () =>
+        window.dispatchEvent(startEvent)
+      );
+      button.addEventListener("touchend", () => window.dispatchEvent(endEvent));
+    }
+  });
+</script>

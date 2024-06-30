@@ -2,15 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="shortcut icon" type="image/jpg" href="assets/star-texture.png"/>
-    <script type="module" src="src/main.js"></script>
-    <script type="module" src="router/router.js"></script>
     <script type="module" src="src/js/nav-menu.js"></script>
-    <!-- <script type="module" src="src/js/page-view.js"></script> -->
-    <!-- <script type="module" src="src/js/test-component.js"></script> -->
+    <script type="module" src="src/js/music-player.js"></script>
+    <script type="module" src="src/js/page-header.js"></script>
     <script type="module" src="src/js/sfx.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="router/router.js"></script>
+    <script type="module" src="src/main.js"></script>
     <title>uriah's website :3</title>
   </head>
 
@@ -23,20 +23,8 @@
       id="content"
       class="group flex-grow overflow-y-auto rounded-sm border-2 border-solid border-primary border-opacity-80 p-5 transition-all shadow-primary hover:border-opacity-100 lg:p-5"
     >
-      <div
-        id="page-header"
-        class="fixed left-8 top-2 rounded-sm border-2 border-primary border-opacity-80 bg-scene px-2 group-hover:border-opacity-100 md:left-10"
-      >
-      <script>
-        const routeBox = document.getElementById('page-header');
-        routeBox.innerHTML = window.location.pathname;
+      <page-header></page-header>
 
-        // Update route content on popstate event (page navigation)
-        window.onpopstate = () => {
-        routeBox.innerHTML = window.location.pathname;
-      };
-      </script>
-      </div>
       <div
         id="percent"
         class="rounded-xs text-sm fixed right-6 top-6 z-10 w-16 md:w-16 bg-primary pt-1 text-center text-scene transition-all duration-300 md:right-10 md:top-10"
@@ -46,136 +34,13 @@
       <div class="h-full" id="view"></div>
     </div>
   </div>
-    <!-- <NavMenu /> -->
+  
     <nav-menu id="header"
     class="flex max-h-24 md:max-h-max select-none items-center justify-center transition-colors ease-in-out "
     ></nav-menu>
-    <!-- <div
-      id="header"
-      class="order-2 flex select-none items-center justify-center transition-colors duration-500 ease-in-out"
-    >
-      <div id="hcol1" class="pr-4 text-right md:pr-14">
-        <a href="/" id="home">home</a><br />
-        <a href="/portfolio" id="portfolio">portfolio</a>
-        <br />
-        <a href="/controls" id="controls">controls</a>
-      </div>
-      <div id="hcol2" class="flex justify-center">
-        <canvas id="eyebox"> </canvas>
-      </div>
-      <div id="hcol3" class="pl-4 text-left md:pl-14">
-        <a href="/music" id="music">music</a> <br />
-        <a href="/gallery" id="gallery">gallery</a> <br />
-        <a href="/the-box" id="the-box">the box</a>
-      </div>
-    </div> -->
-    
-    <!-- music player -->
-  <div
-        id="music-container"
-        class="group/container flex max-h-20 rounded-sm border-2 border-primary border-opacity-80 duration-300 hover:border-opacity-100 md:max-h-28"
-    >
-        <div
-            id="img-container"
-            class="group/tooltip relative flex h-20 w-20 flex-shrink-0 p-1 pb-2 md:h-full md:w-28 md:pb-1"
-        >
-            <img
-                src="https://media.tenor.com/kxefu8OQcD8AAAAC/loli-anime.gif"
-                id="cover"
-                class="cursor-active active:cursor-stabbing"
-            />
-            <img
-                id="cover-tooltip"
-                src="https://media.tenor.com/kxefu8OQcD8AAAAC/loli-anime.gif"
-                class="absolute left-[calc(50%-2px)] z-10 hidden h-full rounded-sm border-[0.5px] border-primary group-hover/tooltip:top-[-160%] group-hover/tooltip:block group-hover/tooltip:scale-[200%]"
-            /> 
-        </div>
-        <div id="music-container-inner" class="grid w-full grid-flow-col max-md:grid-cols-6 grid-cols-7 grid-rows-3">
-            <div
-                id="volume-container"
-                class="no-select col-span-1 max-md:hidden row-span-1 flex w-full cursor-active border-b-2 border-l-2 border-primary border-opacity-80 p-1 text-sm text-secondary transition-colors duration-300 active:cursor-stabbing group-hover/container:border-opacity-100"
-            >
-                <button
-                    id="volume-0"
-                    class="vol-btn transition-colors flex w-1/5 items-center justify-center bg-primary"
-                >
-                    <p class="decoration-secondary decoration-double decoration-2 underline-offset-2" >0%</p>
-                </button>
-                <button
-                    id="volume-25"
-                    class="vol-btn transition-colors flex w-1/5 items-center justify-center bg-primary"
-                >
-                    <p class="decoration-secondary decoration-double decoration-2 underline-offset-2" >25%</p>
-                </button>
-                <button
-                    id="volume-50"
-                    class="vol-btn transition-colors flex w-1/5 items-center justify-center bg-primary"
-                >
-                    <p
-                        class="decoration-secondary decoration-double decoration-2 underline-offset-2"
-                    >
-                        50%
-                    </p>
-                </button>
-                <button
-                    id="volume-75"
-                    class="vol-btn transition-colors flex w-1/5 items-center justify-center border-secondary bg-primary"
-                >
-                    <p class="decoration-secondary decoration-double decoration-2 underline-offset-2" >75%</p>
-                </button>
-                <button
-                    id="volume-100"
-                    class="vol-btn transition-colors flex w-1/5 items-center justify-center border-secondary bg-primary"
-                >
-                    <p class="decoration-secondary decoration-double decoration-2 underline-offset-2" >100%</p>
-                </button>
-            </div>
-            <div id="music-info" class="col-span-1 max-md:hidden row-span-2 flex flex-col justify-center pl-1">
-                <div id="title" ref="title" class="md:text-md text-nowrap text-sm">
-                    {{ songsList[index].title }}
-                </div>
-                <h4 id="spotify-link" class="invisible text-sm underline md:visible">Spotify</h4>
-            </div>
-            <div
-                id="music-progress"
-                class="col-span-6 row-span-1 flex cursor-active active:cursor-stabbing"
-            >
-                <div
-                    @mouseup="progressActive"
-                    id="progress-container"
-                    class="w-full relative border-b-2 border-l-2 border-primary border-opacity-80 p-1 duration-300 group-hover/container:border-opacity-100"
-                ><p id="mobile-title" class="absolute md:hidden top-0.5 left-1.5 text-sm text-scene w-full text-center">awaiting title</p>
-                    <div
-                        id="progress"
-                        class="h-full w-0 bg-primary bg-fixed transition-all duration-150 ease-in"
-                    >
-                        <div
-                            class="h-full bg-gradient-to-r from-transparent from-20% to-secondary bg-fixed"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-            <!-- bg-gradient-to-r from-purple-700 to-orange-700 -->
-            <div id="navigation" class="col-span-6 row-span-2 flex gap-0 justify-center">
-                <button @click="changeSong(-1)" id="prev">
-                    <div class="backward-icon opacity-80 min-h-[33px] w-[64px] transition-all duration-300 group-hover/container:opacity-100">  </div>
-                    <!-- <BackwardIcon class="h-6 w-6" /> -->
-                </button>
-                <button id="play-pause" @click="playPause()" class="cursor-pointer pb-0">
-                    <!-- <PlayIcon v-if="!isPlaying" class="play-icon h-8 w-8" /> -->
-                    <div class="pop play-icon opacity-80 min-h-[33px] w-[64px] transition-all duration-300 group-hover/container:opacity-100">  </div>
-                    <!-- <img src="assets/buttons/off2.png" class="play-icon h-[25px] opacity-80 transition-all duration-300 group-hover/container:opacity-100"> -->
-                    <div class="pop hidden pause-icon opacity-80 min-h-[33px] w-[64px] transition-all duration-300 group-hover/container:opacity-100">  </div>
-                    <!-- <img src="assets/buttons/on2.png" class="pause-icon h-[25px] hidden"> -->
-                    <!-- <PauseIcon v-if="isPlaying" class="pause-icon h-8 w-8" /> -->
-                </button>
-                <button @click="changeSong(1)" id="next">
-                    <!-- <ForwardIcon class="h-6 w-6" /> -->
-                    <div class="pop forward-icon opacity-80 min-h-[33px] w-[64px] transition-all duration-300 group-hover/container:opacity-100">  </div>
-                </button>
-            </div>
-        </div>
-    </div>
+     
+    <music-player></music-player>
+
   </body>
 </html>
 

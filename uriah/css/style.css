@@ -705,14 +705,6 @@ a:active,
   z-index: 10;
 }
 
-.z-30 {
-  z-index: 30;
-}
-
-.order-2 {
-  order: 2;
-}
-
 .col-span-1 {
   grid-column: span 1 / span 1;
 }
@@ -766,20 +758,8 @@ a:active,
   height: 9rem;
 }
 
-.h-6 {
-  height: 1.5rem;
-}
-
-.h-8 {
-  height: 2rem;
-}
-
-.h-\[200px\] {
-  height: 200px;
-}
-
-.h-\[25px\] {
-  height: 25px;
+.h-\[400px\] {
+  height: 400px;
 }
 
 .h-\[calc\(100dvh\)\] {
@@ -788,10 +768,6 @@ a:active,
 
 .h-full {
   height: 100%;
-}
-
-.h-\[400px\] {
-  height: 400px;
 }
 
 .max-h-20 {
@@ -826,16 +802,8 @@ a:active,
   width: 9rem;
 }
 
-.w-6 {
-  width: 1.5rem;
-}
-
-.w-8 {
-  width: 2rem;
-}
-
-.w-\[200px\] {
-  width: 200px;
+.w-\[400px\] {
+  width: 400px;
 }
 
 .w-\[64px\] {
@@ -849,10 +817,6 @@ a:active,
 .w-min {
   width: -moz-min-content;
   width: min-content;
-}
-
-.w-\[400px\] {
-  width: 400px;
 }
 
 .max-w-md {
@@ -902,20 +866,20 @@ a:active,
   resize: both;
 }
 
-.auto-cols-auto {
-  grid-auto-columns: auto;
-}
-
 .grid-flow-col {
   grid-auto-flow: column;
 }
 
-.grid-cols-7 {
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-}
-
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .grid-rows-3 {
@@ -1025,6 +989,10 @@ a:active,
   background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
 }
 
+.bg-primary\/20 {
+  background-color: rgb(var(--color-primary) / 0.2);
+}
+
 .bg-scene {
   --tw-bg-opacity: 1;
   background-color: rgb(var(--color-scene) / var(--tw-bg-opacity));
@@ -1034,19 +1002,8 @@ a:active,
   background-color: transparent;
 }
 
-.bg-red-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
-}
-
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
-}
-
-.from-purple-700 {
-  --tw-gradient-from: #7e22ce var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(126 34 206 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
 .from-transparent {
@@ -1057,10 +1014,6 @@ a:active,
 
 .from-20\% {
   --tw-gradient-from-position: 20%;
-}
-
-.to-orange-700 {
-  --tw-gradient-to: #c2410c var(--tw-gradient-to-position);
 }
 
 .to-secondary {
@@ -1149,6 +1102,11 @@ a:active,
   color: rgb(var(--color-primary) / var(--tw-text-opacity));
 }
 
+.text-red-400 {
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity));
+}
+
 .text-scene {
   --tw-text-opacity: 1;
   color: rgb(var(--color-scene) / var(--tw-text-opacity));
@@ -1191,19 +1149,23 @@ a:active,
   opacity: 0;
 }
 
-.opacity-80 {
-  opacity: 0.8;
+.opacity-100 {
+  opacity: 1;
 }
 
-.shadow-\[0_0_25px\] {
-  --tw-shadow: 0 0 25px;
-  --tw-shadow-colored: 0 0 25px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+.opacity-80 {
+  opacity: 0.8;
 }
 
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-\[0_0_25px\] {
+  --tw-shadow: 0 0 25px;
+  --tw-shadow-colored: 0 0 25px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -1521,6 +1483,10 @@ input,
   cursor: url(/cursor/cursor-active-stab.png), pointer;
 }
 
+.active\:opacity-50:active {
+  opacity: 0.5;
+}
+
 .group\/tooltip:hover .group-hover\/tooltip\:top-\[-160\%\] {
   top: -160%;
 }
@@ -1594,6 +1560,10 @@ input,
     max-height: 7rem;
   }
 
+  .md\:max-h-\[50\%\] {
+    max-height: 50%;
+  }
+
   .md\:max-h-max {
     max-height: -moz-max-content;
     max-height: max-content;
@@ -1609,6 +1579,10 @@ input,
 
   .md\:w-60 {
     width: 15rem;
+  }
+
+  .md\:max-w-\[50\%\] {
+    max-width: 50%;
   }
 
   .md\:items-center {
