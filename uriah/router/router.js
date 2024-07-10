@@ -31,26 +31,49 @@ class Router {
   async loadComponent(route) {
     window.dispatchEvent(new CustomEvent("navEvent"));
     const view = document.getElementById("view");
-    view.innerHTML = "";
-
     const { default: Component } = await this.routes[route].component();
+    document.title = "uriah's " + this.routes[route].title;
     const component = document.createElement(Component.tagName);
-    view.appendChild(component);
+
+    view.classList.add("opacity-0");
+    view.classList.add("translate-y-[100px]");
+    setTimeout(() => {
+      view.classList.remove("opacity-0");
+      view.classList.remove("translate-y-[100px]");
+      view.innerHTML = "";
+      view.appendChild(component);
+    }, 150);
   }
 }
 
 const routes = {
   "/": {
-    component: () => import("../src/js/HomeComponent"),
-    title: "Home",
+    component: () => import("../src/js/Home"),
+    title: "home",
   },
-  "/two": {
-    component: () => import("../src/js/pageTwoComponent"),
-    title: "Page Two",
+  "/portfolio": {
+    component: () => import("../src/js/Portfolio"),
+    title: "portfolio",
   },
+  "/controls": {
+    component: () => import("../src/js/Controls"),
+    title: "controls",
+  },
+  "/music": {
+    component: () => import("../src/js/Music"),
+    title: "music",
+  },
+  "/gallery": {
+    component: () => import("../src/js/Gallery"),
+    title: "gallery",
+  },
+  // "/template": {
+  //   component: () => import("../src/js/componentTemplate"),
+  //   title: "component template",
+  // },
   404: {
     component: () => import("../src/js/404"),
-    title: "Page Two",
+    title: "404",
   },
 };
 

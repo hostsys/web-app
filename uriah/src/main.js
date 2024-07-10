@@ -444,7 +444,9 @@ function colorControl(directive) {
   }
 }
 
-const shadowElements = document.querySelectorAll("#content, #music-container");
+const shadowElements = document.querySelectorAll(
+  "#content, #music-container, #page-header, #progress-container"
+);
 const shadowClass = "shadow-[0_0_25px]";
 
 changeTheme("defaultTheme");

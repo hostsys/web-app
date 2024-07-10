@@ -64,7 +64,7 @@
 }
 
 .pop:not(:active) {
-  animation: pop 200ms linear forwards;
+  animation: pop 150ms linear forwards;
 }
 
 .spin-on-event {

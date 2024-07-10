@@ -6,7 +6,7 @@
     <div class="grid gap-2 grid-cols-3 grid-flow-col h-full">
       <div
         id="color-previous"
-        class="pop bg-primary/20 flex items-center justify-center h-full w-full"
+        class="pop delay-0 bg-primary/20 flex items-center justify-center h-full w-full"
       >
         previous
       </div>
@@ -18,7 +18,7 @@
       </div>
       <div
         id="color-next"
-        class="pop bg-primary/20 flex items-center justify-center h-full w-full"
+        class="pop delay-0 bg-primary/20 flex items-center justify-center h-full w-full"
       >
         next
       </div>
@@ -32,7 +32,7 @@
       </div>
       <div
         id="color-rainbow"
-        class="pop bg-primary/20 flex items-center justify-center h-full w-full"
+        class="pop delay-0 bg-primary/20 flex items-center justify-center h-full w-full"
       >
         rainbow
       </div>
@@ -55,46 +55,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  const createControlEvent = (directive) =>
-    new CustomEvent("controlEvent", { detail: { directive } });
-  const createColorEvent = (directive) =>
-    new CustomEvent("colorEvent", { detail: { directive } });
-
-  const events = {
-    fasterStart: createControlEvent("faster"),
-    stop: createControlEvent("stop"),
-    slowerStart: createControlEvent("slower"),
-    leftStart: createControlEvent("left"),
-    rightStart: createControlEvent("right"),
-    stopR: createControlEvent("stopR"),
-    nextColor: createColorEvent("next"),
-    previousColor: createColorEvent("previous"),
-    rainbow: createColorEvent("rainbow"),
-  };
-
-  const buttons = [
-    { id: "faster", startEvent: events.fasterStart, endEvent: events.stop },
-    { id: "slower", startEvent: events.slowerStart, endEvent: events.stop },
-    { id: "left", startEvent: events.leftStart, endEvent: events.stopR },
-    { id: "right", startEvent: events.rightStart, endEvent: events.stopR },
-    { id: "color-next", startEvent: events.nextColor, endEvent: null },
-    { id: "color-previous", startEvent: events.previousColor, endEvent: null },
-    { id: "color-rainbow", startEvent: events.rainbow, endEvent: null },
-  ];
-
-  buttons.forEach(({ id, startEvent, endEvent }) => {
-    const button = document.getElementById(id);
-    if (id.includes("color-")) {
-      button.addEventListener("click", () => {
-        window.dispatchEvent(startEvent);
-      });
-    } else {
-      button.addEventListener("touchstart", () =>
-        window.dispatchEvent(startEvent)
-      );
-      button.addEventListener("touchend", () => window.dispatchEvent(endEvent));
-    }
-  });
-</script>

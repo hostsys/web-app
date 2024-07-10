@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="shortcut icon" type="image/jpg" href="assets/star-texture.png"/>
+    <script type="module" src="/router/router.js"></script>
     <script type="module" src="/src/js/nav-menu.js"></script>
     <script type="module" src="/src/js/music-player.js"></script>
     <script type="module" src="/src/js/page-header.js"></script>
-    <script type="module" src="/router/router.js"></script>
     <script type="module" src="/src/main.js"></script>
     <title>uriah's website :3</title>
   </head>
@@ -30,7 +30,7 @@
       >
         scroll
       </div>
-      <div class="h-full" id="view"></div>
+      <div class="h-full transition-all ease-in-out" id="view"></div>
     </div>
   </div>
   
@@ -144,4 +144,3 @@ const getBoxes = async () => {
 
 getBoxes()
 </script>
-<!-- <script src="vanilla_components/vanilla_components.js"></script> -->
