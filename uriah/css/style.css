@@ -840,12 +840,6 @@ a:active,
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.scale-50 {
-  --tw-scale-x: .5;
-  --tw-scale-y: .5;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -1017,6 +1011,14 @@ a:active,
   background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 
+.bg-primary\/10 {
+  background-color: rgb(var(--color-primary) / 0.1);
+}
+
+.bg-opacity-20 {
+  --tw-bg-opacity: 0.2;
+}
+
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
@@ -1165,6 +1167,10 @@ a:active,
 
 .opacity-80 {
   opacity: 0.8;
+}
+
+.opacity-20 {
+  opacity: 0.2;
 }
 
 .shadow {
@@ -1489,16 +1495,6 @@ input,
   --tw-border-opacity: 1;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.active\:animate-spin:active {
-  animation: spin 1s linear infinite;
-}
-
 .active\:cursor-stab:active {
   cursor: url(/cursor/cursor-stab.png), pointer;
 }
@@ -1539,6 +1535,12 @@ input,
 
 .group\/container:hover .group-hover\/container\:opacity-100 {
   opacity: 1;
+}
+
+@media not all and (min-width: 1024px) {
+  .max-lg\:hidden {
+    display: none;
+  }
 }
 
 @media not all and (min-width: 768px) {
@@ -1635,6 +1637,18 @@ input,
 }
 
 @media (min-width: 1024px) {
+  .lg\:visible {
+    visibility: visible;
+  }
+
+  .lg\:block {
+    display: block;
+  }
+
+  .lg\:hidden {
+    display: none;
+  }
+
   .lg\:p-5 {
     padding: 1.25rem;
   }

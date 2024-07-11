@@ -1,6 +1,3 @@
-// sfx
-
-// document.addEventListener("DOMContentLoaded", () => {
 class Sfx {
   constructor(source, volume = 0.1, loop = false) {
     this.audio = new Audio(source);
@@ -23,53 +20,37 @@ class Sfx {
   }
 }
 
-const clickSfx = new Sfx(
+const longSfx = new Sfx(
   "http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/bonus.wav"
 );
-const enterSfx = new Sfx(
+const hoverSfx = new Sfx(
   "http://commondatastorage.googleapis.com/codeskulptor-demos/pyman_assets/eatpellet.ogg"
 );
-const navSfx = new Sfx(
+const shortSfx = new Sfx(
   "http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/alien_shoot.wav"
 );
 
-const sfxElements = Array.from(
-  document.querySelectorAll(
-    "a, #enterBtn, button:not(.vol-btn), .vol-btn, #progress-container"
-  )
-);
-
-for (let sfxElement of sfxElements) {
-  if (sfxElement.id === "enterBtn") {
-    sfxElement.addEventListener("click", () => {
-      playPauseSong();
-      clickSfx.cloneAndPlay();
-    });
-  } else {
-    if (sfxElement.parentElement.id === "navigation") {
-      sfxElement.addEventListener("click", () => navSfx.cloneAndPlay());
-      sfxElement.addEventListener("mouseenter", () => enterSfx.cloneAndPlay());
-    } else if (
-      sfxElement.parentElement.id === "volume-container" ||
-      sfxElement.id === "progress-container"
-    ) {
-      sfxElement.addEventListener("click", () => navSfx.cloneAndPlay());
-    } else {
-      sfxElement.addEventListener("mouseenter", () => enterSfx.cloneAndPlay());
-      sfxElement.addEventListener("click", () => clickSfx.cloneAndPlay());
-    }
+document.addEventListener("click", (e) => {
+  const { target } = e;
+  if (target.matches("a") || target.matches("button")) {
+    sfx("long");
   }
-}
+});
+document.addEventListener("mouseover", (e) => {
+  const { target } = e;
+  if (target.matches("a")) {
+    hoverSfx.cloneAndPlay();
+  }
+});
 
 export function sfx(type) {
-  if (type == "nav") {
-    navSfx.play();
+  if (type == "short") {
+    shortSfx.play();
   }
-  if (type == "click") {
-    clickSfx.play();
+  if (type == "long") {
+    longSfx.play();
   }
-  if (type == "enter") {
-    enterSfx.play();
+  if (type == "hover") {
+    hoverSfx.play();
   }
 }
-// });
