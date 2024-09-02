@@ -63,12 +63,25 @@
   }
 }
 
+@keyframes rotate {
+  from {
+    transform: rotateY(45deg);
+  }
+  to {
+    transform: rotateY(225deg);
+  }
+}
+
 .pop:not(:active) {
   animation: pop 150ms linear forwards;
 }
 
 .spin-on-event {
   animation: spinpop405 500ms linear forwards;
+}
+
+.rotate {
+  animation: rotate 1s linear infinite;
 }
 
 @-webkit-keyframes cursor {

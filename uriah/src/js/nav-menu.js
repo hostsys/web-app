@@ -15,7 +15,7 @@ const html = `
   <div id="hcol3" class="pl-4 text-left md:pl-14">
     <a href="/music" id="music">music</a> <br />
     <a href="/gallery" id="gallery">gallery</a> <br />
-    <a href="/box" id="the-box">box</a>
+    <a href="/the-box" id="the-box">box</a>
   </div>
 `;
 

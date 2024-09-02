@@ -32,7 +32,12 @@ const shortSfx = new Sfx(
 
 document.addEventListener("click", (e) => {
   const { target } = e;
-  if (target.matches("a") || target.matches("button")) {
+  if (
+    target.matches("a") ||
+    (target.matches("button") &&
+      !target.matches(".vol-btn") &&
+      !target.matches(".exempt"))
+  ) {
     sfx("long");
   }
 });

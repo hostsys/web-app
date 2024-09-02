@@ -1,1 +1,62 @@
-<h1>this is where the music goes!</h1>
+<div
+  class="w-full md:h-full grid grid-cols-1 md:grid-cols-2 md:gap-4 transition-colors duration-300"
+>
+  <div class="max-md:order-2" id="music-container"></div>
+  <template id="song-template">
+    <div
+      class="w-full transition-colors duration-300 backdrop-blur-sm border border-primary my-2 gap-2 flex"
+    >
+      <img
+        id="cover-art"
+        class="cover-art row-span-2 col-span-1 w-24 h-24 p-1 cursor-active active:cursor-stabbing"
+      />
+      <div class="w-full my-1 gap-1 md:gap-2 grid grid-cols-10 grid-rows-2">
+        <div class="row-span-1 col-span-9 flex gap-2 items-end">
+          <button id="play-pause" class="exempt flex gap-2 w-full">
+            <img
+              id="playing-icon"
+              class="h-[29px] w-[31px] hidden hover:opacity-80"
+            />
+            <h2
+              id="title"
+              class="text-scene transition-colors duration-300 hover:opacity-80 bg-primary px-2"
+            ></h2>
+          </button>
+        </div>
+        <div
+          class="row-span-1 transition-colors duration-300 text-sm col-span-9 flex gap-2 items-start"
+        >
+          <a class="underline" id="spotify">spotify</a>
+          <div
+            class="border transition-colors duration-300 border-primary border-l-1 h-8"
+          ></div>
+          <h3 class="max-lg:hidden" id="one-liner"></h3>
+          <div
+            class="border transition-colors duration-300 border-primary max-lg:hidden border-l-1 h-8"
+          ></div>
+          <p id="date"></p>
+        </div>
+      </div>
+    </div>
+  </template>
+  <div class="max-md:order-1 h-min md:h-full flex flex-col justify-center">
+    <h1 class="text-xl">here is a collection of some of my music</h1>
+    <p>newest is closer to the top.</p>
+  </div>
+</div>
+
+<style>
+  #playing-icon {
+    image-rendering: pixelated;
+    background-image: url("/assets/star-texture.png");
+    background-size: cover;
+    -webkit-mask-image: url("/assets/star-texture.png");
+    -webkit-mask-mode: alpha;
+    -webkit-mask-size: cover;
+    mask-image: url("/assets/star-texture.png");
+    mask-mode: alpha;
+    mask-size: cover;
+    background-blend-mode: multiply;
+    background-color: rgb(var(--color-primary));
+  }
+</style>

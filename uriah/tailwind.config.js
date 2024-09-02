@@ -6,6 +6,7 @@ module.exports = {
     "./src/pages/*",
     "./src/main.js",
     "./src/js/*",
+    "./router/*",
   ],
   theme: {
     fontFamily: {

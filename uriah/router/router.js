@@ -35,11 +35,9 @@ class Router {
     document.title = "uriah's " + this.routes[route].title;
     const component = document.createElement(Component.tagName);
 
-    view.classList.add("opacity-0");
-    view.classList.add("translate-y-[100px]");
+    view.classList.add("opacity-0", "translate-y-[100px]");
     setTimeout(() => {
-      view.classList.remove("opacity-0");
-      view.classList.remove("translate-y-[100px]");
+      view.classList.remove("opacity-0", "translate-y-[100px]");
       view.innerHTML = "";
       view.appendChild(component);
     }, 150);
@@ -66,6 +64,10 @@ const routes = {
   "/gallery": {
     component: () => import("../src/js/Gallery"),
     title: "gallery",
+  },
+  "/the-box": {
+    component: () => import("../src/js/TheBox"),
+    title: "box",
   },
   // "/template": {
   //   component: () => import("../src/js/componentTemplate"),
