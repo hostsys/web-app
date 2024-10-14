@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as TWEEN from "@tweenjs/tween.js";
 
 // const app = createApp(App);
@@ -82,7 +83,7 @@ bgScene.add(bgCamera);
 
 // renderererer
 const canvas = document.querySelector("#bg");
-const renderer = new THREE.WebGLRenderer({ canvas });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(sizes.width, sizes.height);
@@ -259,21 +260,91 @@ const eyeSizes = {
 const eyeScene = new THREE.Scene();
 
 // shape
-const eyeShape = new THREE.IcosahedronGeometry(2, 0, 0);
-const eyeMaterial = new THREE.MeshStandardMaterial({
-  color: "white",
-  transparent: true,
-  opacity: 1.0,
-  wireframe: false,
+const loader = new GLTFLoader();
+let eyeMesh;
+let mixer;
+loader.load(
+  "../../assets/models/eyeball.glb",
+  function (gltf) {
+    gltf.scene.scale.set(1.8, 1.8, 1.8);
+    gltf.scene.castShadow = true;
+
+    eyeMesh = gltf.scene;
+
+    // eyeScene.add(gltf.scene);
+    // loadedModel = gltf.scene;
+    // const eyeOrigin = new THREE.Vector3(0, 0, 0);
+    // eyeMesh.position.x = 0;
+    // eyeMesh.position.z = 0;
+    // eyeMesh.rotation.x = 90;
+    // eyeMesh.lookAt(eyeOrigin);
+
+    eyeScene.add(eyeMesh);
+  },
+  undefined,
+  function (error) {
+    console.log(error);
+  }
+);
+let action, action1; // Declare variables for the actions
+
+let lidMesh;
+loader.load(
+  "../../assets/models/eyelids.glb",
+  function (gltf) {
+    gltf.scene.scale.set(1.8, 1.8, 1.8);
+    gltf.scene.castShadow = true;
+    lidMesh = gltf.scene;
+    eyeScene.add(lidMesh);
+
+    mixer = new THREE.AnimationMixer(gltf.scene);
+    const anims = gltf.animations;
+
+    const blinkTop = THREE.AnimationClip.findByName(anims, "Action");
+    const blinkBot = THREE.AnimationClip.findByName(anims, "Action.002");
+
+    // Store the actions in the global variables
+    action = mixer.clipAction(blinkTop);
+    action1 = mixer.clipAction(blinkBot);
+
+    // Optionally, play the animations initially or keep them paused for later use
+    action.clampWhenFinished = true; // Stop at the last frame
+    action.loop = THREE.LoopOnce; // Play the animation once
+    action1.clampWhenFinished = true;
+    action1.loop = THREE.LoopOnce;
+
+    // Initially, don't play them if you want to control them externally
+    // action.play();
+    // action1.play();
+  },
+  undefined,
+  function (error) {
+    console.log(error);
+  }
+);
+
+// Call this function whenever you want to play the animations
+function playBlinkAnimation() {
+  if (action && action1) {
+    action.reset().play(); // Reset to the beginning and play
+    action1.reset().play();
+  }
+}
+
+document.addEventListener("click", function () {
+  playBlinkAnimation();
 });
-const eyeMesh = new THREE.Mesh(eyeShape, eyeMaterial);
 
-const eyeOrigin = new THREE.Vector3(0, 0, 0);
-eyeMesh.position.x = 0;
-eyeMesh.position.z = 0;
-eyeMesh.lookAt(eyeOrigin);
-
-eyeScene.add(eyeMesh);
+// const eyeShape = new THREE.IcosahedronGeometry(2, 0, 0);
+// const altShape = new THREE.ConeGeometry(2, 4, 3);
+// const eyeMaterial = new THREE.MeshStandardMaterial({
+//   color: "white",
+//   transparent: true,
+//   opacity: 1.0,
+//   wireframe: false,
+// });
+// const eyeMesh = new THREE.Mesh(eyeShape, eyeMaterial);
+// const eyeMesh = new THREE.Mesh(loadedModel);
 
 // camera
 // const eyeCamera = new THREE.PerspectiveCamera(
@@ -289,50 +360,92 @@ const eyeCamera = new THREE.OrthographicCamera(
   eyeSizes.height / -75 // Bottom (adjust this value)
 );
 
-eyeCamera.position.z = 10;
+eyeCamera.position.z = 100;
 eyeScene.add(eyeCamera);
 
 // light
-const eyeLight = new THREE.PointLight(0xffffff, 25);
+const eyeLight = new THREE.PointLight(0xffffff, 35);
 eyeLight.position.set(0, 0, 10);
+const eyeLight2 = new THREE.PointLight(0xffffff, 70);
+eyeLight2.position.set(10, 0, 10);
+const eyeLight3 = new THREE.PointLight(0xffffff, 70);
+eyeLight2.position.set(0, 10, 10);
 
 eyeScene.add(eyeLight);
+eyeScene.add(eyeLight2);
+eyeScene.add(eyeLight3);
 
 // mouse move anim
 
-window.addEventListener("mousemove", onmousemove, false);
+window.addEventListener("mousemove", onMouseMove, false);
 
 const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
 const raycaster = new THREE.Raycaster();
+const lidRaycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+const lidMouse = new THREE.Vector2();
 const intersectPoint = new THREE.Vector3();
+const lidIntersectPoint = new THREE.Vector3();
+const eyeDiv = document.getElementById("eyebox");
+const speed = 150;
 
-function onmousemove(event) {
+function onMouseMove(event) {
   setTimeout(function () {
-    // const startRotation = eyeMesh.quaternion.clone();
+    if (eyeMesh) {
+      const centerPoint =
+        eyeDiv.getBoundingClientRect().top + eyeSizes.height / 2;
+      const offsetY = centerPoint / sizes.height;
 
-    mouse.x = (event.clientX / sizes.width) * 75 - 37.5;
-    mouse.y = -(event.clientY / sizes.height) * 75 + -10;
-    raycaster.setFromCamera(mouse, eyeCamera);
-    raycaster.ray.intersectPlane(plane, intersectPoint);
-    intersectPoint.z = 100; // so that the object is still always facing the camera which has a position.z of 100 too
-    // eyeMesh.lookAt(intersectPoint);
+      mouse.x = (event.clientX / sizes.width) * 120 - 60;
+      mouse.y = -(event.clientY / sizes.height) * 100 + 100 * offsetY;
+      lidMouse.x = (event.clientX / sizes.width) * 50 - 25;
+      lidMouse.y = -(event.clientY / sizes.height) * 40 + 40 * offsetY;
 
-    // backup original rotation
-    var startRotation = new THREE.Euler().copy(eyeMesh.rotation);
+      raycaster.setFromCamera(mouse, eyeCamera);
+      lidRaycaster.setFromCamera(lidMouse, eyeCamera);
+      raycaster.ray.intersectPlane(plane, intersectPoint);
+      lidRaycaster.ray.intersectPlane(plane, lidIntersectPoint);
+      intersectPoint.z = 100;
+      lidIntersectPoint.z = 100;
 
-    // final rotation (with lookAt)
-    eyeMesh.lookAt(intersectPoint);
-    var endRotation = new THREE.Euler().copy(eyeMesh.rotation);
+      const startQuaternion = eyeMesh.quaternion.clone();
+      const lStartQuaternion = lidMesh.quaternion.clone();
 
-    // revert to original rotation
-    eyeMesh.rotation.copy(startRotation);
+      eyeMesh.lookAt(intersectPoint);
+      lidMesh.lookAt(lidIntersectPoint);
 
-    const eyeTween = new TWEEN.Tween(eyeMesh.rotation)
-      .to({ x: endRotation.x, y: endRotation.y, z: endRotation.z }, 150)
-      .easing(TWEEN.Easing.Quadratic.Out);
-    eyeTween.start();
-  }, 150);
+      const endQuaternion = eyeMesh.quaternion.clone();
+      const lEndQuaternion = lidMesh.quaternion.clone();
+
+      eyeMesh.quaternion.copy(startQuaternion);
+      lidMesh.quaternion.copy(lStartQuaternion);
+
+      const eyeTween = new TWEEN.Tween(eyeMesh.quaternion)
+        .to(
+          {
+            x: endQuaternion.x,
+            y: endQuaternion.y,
+            z: endQuaternion.z,
+            w: endQuaternion.w,
+          },
+          speed
+        )
+        .easing(TWEEN.Easing.Quadratic.Out);
+      const lidTween = new TWEEN.Tween(lidMesh.quaternion)
+        .to(
+          {
+            x: lEndQuaternion.x,
+            y: lEndQuaternion.y,
+            z: lEndQuaternion.z,
+            w: lEndQuaternion.w,
+          },
+          speed
+        )
+        .easing(TWEEN.Easing.Quadratic.Out);
+      lidTween.start();
+      eyeTween.start();
+    }
+  }, speed);
 }
 
 // change color theme
@@ -514,37 +627,41 @@ document.addEventListener("DOMContentLoaded", () => {
         // color cases
         switch (itemID) {
           case "home":
-            eyeMaterial.color.set("purple");
+            // eyeMesh.geometry = altShape;
+            // setTimeout(() => {
+            //   eyeMesh.geometry = eyeShape;
+            // }, 300);
+            // eyeMaterial.color.set("purple");
             break;
 
           case "portfolio":
-            eyeMaterial.color.set("blue");
+            // eyeMaterial.color.set("blue");
             break;
 
           case "music":
-            eyeMaterial.color.set("yellow");
+            // eyeMaterial.color.set("yellow");
             break;
 
           case "gallery":
-            eyeMaterial.color.set("green");
+            // eyeMaterial.color.set("green");
             break;
 
           case "the-box":
-            eyeMaterial.color.set("orange");
+            // eyeMaterial.color.set("orange");
             break;
 
           case "controls":
-            eyeMaterial.color.set("cyan");
+            // eyeMaterial.color.set("cyan");
             break;
 
           default:
-            eyeMaterial.color.set("white");
+          // eyeMaterial.color.set("white");
         }
       });
       // mouseout event, default color
       child.addEventListener("mouseout", function () {
         // const itemID = this.id;
-        eyeMaterial.color.set("white");
+        // eyeMaterial.color.set("white");
       });
     }
   }
@@ -552,10 +669,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const eyeRenderer = new THREE.WebGLRenderer({
     canvas: eyeBox,
     alpha: true,
-    antialias: false,
+    antialias: true,
   });
 
-  eyeRenderer.setPixelRatio(window.devicePixelRatio * 0.5);
+  // eyeRenderer.setPixelRatio(window.devicePixelRatio * 0.2);
   eyeRenderer.setSize(eyeSizes.width, eyeSizes.height);
   eyeRenderer.render(eyeScene, eyeCamera);
 
@@ -564,6 +681,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let eyeInterval = 1 / 120;
 
   const eyeLoop = (t) => {
+    if (mixer) {
+      mixer.update(eyeClock.getDelta());
+    }
+
     window.requestAnimationFrame(eyeLoop);
     eyeDelta += eyeClock.getDelta();
 
