@@ -62,7 +62,7 @@ const bgMaterial = new THREE.PointsMaterial({
   fog: true,
   map: bgTexture,
   transparent: true,
-  // alphaTest: 0.1,
+  alphaTest: 0.9,
   blending: THREE.NormalBlending,
 });
 // console.log(bgMaterial)
@@ -84,8 +84,10 @@ bgScene.add(bgCamera);
 // renderererer
 const canvas = document.querySelector("#bg");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+// renderer.premultipliedAlpha = false;
 
-renderer.setPixelRatio(window.devicePixelRatio);
+// renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(window.devicePixelRatio / 3);
 renderer.setSize(sizes.width, sizes.height);
 renderer.render(bgScene, bgCamera);
 
@@ -401,12 +403,43 @@ function onMouseMove(event) {
       lidMouse.x = (event.clientX / sizes.width) * 50 - 25;
       lidMouse.y = -(event.clientY / sizes.height) * 40 + 40 * offsetY;
 
+      // get the x y coords of the center
+      const eyeRect = eyeDiv.getBoundingClientRect();
+      const centerX = eyeRect.left + eyeRect.width / 2;
+      const centerY = eyeRect.top + eyeRect.height / 2;
+
+      // get the maximum possible distance to each corner
+      const distance = Math.sqrt(
+        (event.clientX - centerX) ** 2 + (event.clientY - centerY) ** 2
+      );
+      const distTopLeft = Math.sqrt(centerX ** 2 + centerY ** 2);
+      const distTopRight = Math.sqrt(
+        (window.innerWidth - centerX) ** 2 + centerY ** 2
+      );
+      const distBottomLeft = Math.sqrt(
+        centerX ** 2 + (window.innerHeight - centerY) ** 2
+      );
+      const distBottomRight = Math.sqrt(
+        (window.innerWidth - centerX) ** 2 + (window.innerHeight - centerY) ** 2
+      );
+      // returns the greatest number
+      const maxDistance = Math.max(
+        distTopLeft,
+        distTopRight,
+        distBottomLeft,
+        distBottomRight
+      );
+      const normalizedDistance = distance / maxDistance;
+      // linear interpolation between 50 and 120
+      const intersectZAdjusted =
+        35 * (1 - normalizedDistance) + 150 * normalizedDistance;
+
       raycaster.setFromCamera(mouse, eyeCamera);
       lidRaycaster.setFromCamera(lidMouse, eyeCamera);
       raycaster.ray.intersectPlane(plane, intersectPoint);
       lidRaycaster.ray.intersectPlane(plane, lidIntersectPoint);
-      intersectPoint.z = 100;
-      lidIntersectPoint.z = 100;
+      intersectPoint.z = intersectZAdjusted;
+      lidIntersectPoint.z = intersectZAdjusted;
 
       const startQuaternion = eyeMesh.quaternion.clone();
       const lStartQuaternion = lidMesh.quaternion.clone();
@@ -672,8 +705,8 @@ document.addEventListener("DOMContentLoaded", () => {
     antialias: true,
   });
 
-  // eyeRenderer.setPixelRatio(window.devicePixelRatio * 0.2);
   eyeRenderer.setSize(eyeSizes.width, eyeSizes.height);
+  eyeRenderer.setPixelRatio(window.devicePixelRatio * 0.2);
   eyeRenderer.render(eyeScene, eyeCamera);
 
   let eyeClock = new THREE.Clock();
