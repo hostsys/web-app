@@ -14,6 +14,7 @@ class Home extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = html;
+    this.greeting = document.getElementById('greeting')
 
     const view = document.getElementById("view");
     const anchors = view.querySelectorAll("a");
@@ -24,7 +25,13 @@ class Home extends HTMLElement {
       });
     }
 
-    const test = document.getElementById("test");
+    this.greeting.addEventListener('click', () => {
+      this.greeting.innerText = ':]'
+      setTimeout(() => {
+        this.greeting.innerText = 'hello'
+      }, 750)
+    })
+
     const sizes = {
       width: 400,
       height: 400,
@@ -142,7 +149,7 @@ class Home extends HTMLElement {
     }, 1000); */
   }
 
-  disconnectedCallback() {}
+  disconnectedCallback() { }
 }
 customElements.define(Home.tagName, Home);
 export default Home;

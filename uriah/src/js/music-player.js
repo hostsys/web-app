@@ -5,7 +5,7 @@ const html = `
   <!-- music player -->
  <div
         id="music-container"
-        class="crtext group/container flex max-h-20 rounded-sm border-4 border-primary border-opacity-80 duration-300 hover:border-opacity-100 md:max-h-28"
+        class="group/container flex max-h-20 rounded-sm border-4 border-primary border-opacity-80 duration-300 hover:border-opacity-100 md:max-h-28"
     >
         <div
             id="img-container"
@@ -66,7 +66,7 @@ const html = `
                 <div id="title" ref="title" class="md:text-md text-nowrap text-sm">
                     {{ songsList[index].title }}
                 </div>
-                <h4 id="spotify-link" class="invisible text-sm underline md:visible">Spotify</h4>
+                <h4 id="spotify-link" class="crtext invisible text-sm underline md:visible">Spotify</h4>
             </div>
             <div
                 id="music-progress"

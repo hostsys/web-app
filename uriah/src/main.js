@@ -876,41 +876,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", function () {
   let content = document.getElementById("content");
+  let view = document.getElementById("view");
 
   const percent = document.getElementById("percent");
   percent.style.opacity = "0";
 
-  let maxScrollDistance = content.scrollHeight - content.clientHeight;
+  let maxScrollDistance = view.scrollHeight - view.clientHeight;
 
   window.addEventListener("load", () => {
-    maxScrollDistance = content.scrollHeight - content.clientHeight;
+    maxScrollDistance = view.scrollHeight - view.clientHeight;
     ensureScroll();
   });
 
   window.onresize = function () {
-    maxScrollDistance = content.scrollHeight - content.clientHeight;
+    maxScrollDistance = view.scrollHeight - view.clientHeight;
     ensureScroll();
   };
-  /* 
-  router.afterEach(() => {
-    percent.style.opacity = "0";
-    nextTick(() => {
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            window.requestAnimationFrame(() => {
-              setTimeout(() => {
-                showOrHideScroll();
-              }, 100);
-            });
-          });
-        });
-      });
-    });
-  });
- */
+
   window.addEventListener("navEvent", (e) => {
-    content.scrollTop = 0;
+    view.scrollTop = 0;
     ensureScroll();
   });
 
@@ -918,20 +902,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function ensureScroll() {
     percent.style.opacity = "0";
     window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            setTimeout(() => {
-              showOrHideScroll();
-            }, 1000);
-          });
-        });
-      });
+      setTimeout(() => {
+        showOrHideScroll();
+      }, 500);
     });
   }
 
   function showOrHideScroll() {
-    maxScrollDistance = content.scrollHeight - content.clientHeight;
+    maxScrollDistance = view.scrollHeight - view.clientHeight;
     if (maxScrollDistance === 0) {
       percent.style.opacity = "0";
     } else {
@@ -945,7 +923,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // defining what should be painted in the scroll box
   function scrollBoxContent() {
-    let scrollDistance = content.scrollTop;
+    let scrollDistance = view.scrollTop;
     let progress = (scrollDistance / maxScrollDistance) * 100;
     progress = Math.max(0, Math.min(100, progress));
     percent.innerHTML = Math.round(progress) + "%";
@@ -969,33 +947,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  content.onscroll = scrollBoxContent;
+  view.onscroll = scrollBoxContent;
 
   // start button
-  const enterBtn = document.getElementById("enterBtn");
+  // const enterBtn = document.getElementById("enterBtn");
   // const enterBtnBox = document.getElementById('enterBtnBox')
   // const body = document.getElementById('contentBody')
-
-  // // enterBtn.addEventListener('click', () => {
-  // //     body.style.opacity = '1'
-  // //     // // enterBtn.style.opacity = 'none';
-  // //     // enterBtnBox.style.opacity = '0'
-  // //     // enterBtnBox.style.zIndex = '-3'
-
-  // //     enterBtnBox.remove()
-  // //     showOrHideScroll()
-  // //     playPauseSong
-  // // })
-
-  /*  enterBtn.addEventListener('click', () => {
-        showOrHideScroll()
-        playPauseSong
-    }) */
-
+  //
+  // enterBtn.addEventListener('click', () => {
+  //   body.style.opacity = '1'
+  //   enterBtn.style.opacity = 'none';
+  //   enterBtnBox.style.opacity = '0'
+  //   enterBtnBox.style.zIndex = '-3'
+  //
+  //   enterBtnBox.remove()
+  //   showOrHideScroll()
+  //   playPauseSong
+  // })
+  //
+  // enterBtn.addEventListener('click', () => {
+  //   showOrHideScroll()
+  //   playPauseSong
+  // })
+  //
   // body.style.opacity = '0'
-  // // enterBtn.style.opacity = 'none';
-  // // enterBtnBox.style.opacity = '0'
-  // // enterBtnBox.style.zIndex = '-3'
+  // enterBtn.style.opacity = 'none';
+  // enterBtnBox.style.opacity = '0'
+  // enterBtnBox.style.zIndex = '-3'
   // showOrHideScroll()
 });
 

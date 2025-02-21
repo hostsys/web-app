@@ -17,12 +17,34 @@
   <body
     class="flex h-[calc(100dvh)] cursor-default flex-col gap-10 overflow-y-hidden p-5 font-pixel text-base text-primary selection:bg-primary selection:text-secondary active:cursor-stab md:p-5"
     id="contentBody"
-  >    <canvas id="bg"></canvas>
+  >    
+    <canvas id="bg"></canvas>
+
+      <dialog
+        class="backdrop-blur-sm z-30 p-4 inset-0 border-2 border-opacity-80 hover:border-opacity-100 border-primary bg-transparent text-primary transition-all"
+          open
+      >
+        <h3 class="text-xl">enter?</h3>
+        <form class="flex place-content-end" method="dialog">
+          <button
+            id="neverMind"
+            class="cursor-active border-2 border-primary mr-1 px-2 mt-2 transition-colors-manual place-self-end"
+          >
+            never mind
+          </button>
+          <button
+            id="enterBtn"
+            class="cursor-active crtext border-2 border-primary px-2 mt-2 transition-colors-manual"
+          >
+            okay
+          </button>
+        </form>
+      </dialog>
  
-  <div
-      id="content"
-      class="crt warp crtext group flex-grow overflow-y-auto rounded-sm border-4 border-solid border-primary border-opacity-80 p-5 transition-all shadow-primary hover:border-opacity-100 lg:p-5"
-    >
+    <div
+        id="content"
+        class="duration-300 opacity-0 crt warp group flex-grow overflow-y-auto rounded-sm border-4 border-solid border-primary border-opacity-80 p-5 transition-all shadow-primary hover:border-opacity-100 lg:p-5"
+      >
       <page-header></page-header>
 
       <div
@@ -33,13 +55,12 @@
       </div>
       <div class="h-full transition-all max-w-full overflow-x-hidden ease-in-out" id="view"></div>
     </div>
-  </div>
   
     <nav-menu id="header"
-    class="crtext flex max-h-24 md:max-h-max select-none items-center justify-center transition-colors ease-in-out "
+    class="duration-300 opacity-0 flex max-h-24 md:max-h-max select-none items-center justify-center transition-colors ease-in-out "
     ></nav-menu>
      
-    <music-player></music-player>
+    <music-player id="musicPlayer" class="duration-300 opacity-0"></music-player>
 
   </body>
 </html>
@@ -101,31 +122,24 @@
   background-blend-mode: multiply;
   background-color: rgb(var(--color-primary));
   }
+
+  dialog::backdrop {
+    background-color: black;
+    opacity: 0.8;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* z-index: 10; */
+  }
 </style>
 
 <script>
-
-// import axios from "axios";
-
-//   const getBoxes = async () => {
-//   try {
-//     const response = await axios.get(
-//       "https://uriah.website/wp-json/hs/v1/boxes"
-//     );
-//     const boxes = response.data;
-//     console.log('the fuck?')
-//   }catch (err) {
-//     console.log(err);
-//   }
-// }
-
 const getBoxes = async () => {
   const boxes = await fetch("https://uriah.website/wp-json/hs/v1/boxes").then((response) => response.json());
 
   const latestBox = boxes[0]?.hex || '#fff'
-
-  // console.log(boxes)
-  // console.log('the latest box color is: ', latestBox)
 
   document.documentElement.style.setProperty(
       "--box-color",
@@ -138,6 +152,20 @@ const getBoxes = async () => {
     getBoxes()
   },1000)
 }
-
 getBoxes()
+
+const enter = document.getElementById('enterBtn')
+const nvm = document.getElementById('neverMind')
+const faders = ['content', 'header', 'musicPlayer']
+
+enter.addEventListener('click', () => {
+  faders.forEach(fader => {
+    document.getElementById(fader).classList.add('opacity-100')
+  })
+  const changeSongEvent = new CustomEvent("changeSong", {
+    detail: 1,
+  });
+  window.dispatchEvent(changeSongEvent);
+})
+
 </script>
