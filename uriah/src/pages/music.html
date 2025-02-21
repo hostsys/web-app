@@ -4,7 +4,7 @@
   <div class="max-md:order-2" id="music-container"></div>
   <template id="song-template">
     <div
-      class="w-full transition-colors duration-300 backdrop-blur-sm border border-primary my-2 gap-2 flex"
+      class="w-full transition-colors duration-300 backdrop-blur-sm border-4 border-primary my-2 gap-2 flex"
     >
       <img
         id="cover-art"
@@ -28,11 +28,11 @@
         >
           <a class="underline" id="spotify">spotify</a>
           <div
-            class="border transition-colors duration-300 border-primary border-l-1 h-8"
+            class="border transition-colors duration-300 border-primary border-l-2 h-8"
           ></div>
           <h3 class="max-lg:hidden" id="one-liner"></h3>
           <div
-            class="border transition-colors duration-300 border-primary max-lg:hidden border-l-1 h-8"
+            class="border transition-colors duration-300 border-primary max-lg:hidden border-l-2 h-8"
           ></div>
           <p id="date"></p>
         </div>
@@ -48,12 +48,12 @@
 <style>
   #playing-icon {
     image-rendering: pixelated;
-    background-image: url("/assets/star-texture.png");
+    background-image: url("/images/star-texture.png");
     background-size: cover;
-    -webkit-mask-image: url("/assets/star-texture.png");
+    -webkit-mask-image: url("/images/star-texture.png");
     -webkit-mask-mode: alpha;
     -webkit-mask-size: cover;
-    mask-image: url("/assets/star-texture.png");
+    mask-image: url("/images/star-texture.png");
     mask-mode: alpha;
     mask-size: cover;
     background-blend-mode: multiply;

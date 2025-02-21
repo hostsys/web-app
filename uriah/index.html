@@ -9,6 +9,7 @@
     <script type="module" src="/src/js/nav-menu.js"></script>
     <script type="module" src="/src/js/music-player.js"></script>
     <script type="module" src="/src/js/page-header.js"></script>
+    <script type="module" src="/src/js/filter.js"></script>
     <script type="module" src="/src/main.js"></script>
     <title>uriah's website :3</title>
   </head>
@@ -20,7 +21,7 @@
  
   <div
       id="content"
-      class="group flex-grow overflow-y-auto rounded-sm border-2 border-solid border-primary border-opacity-80 p-5 transition-all shadow-primary hover:border-opacity-100 lg:p-5"
+      class="crt warp crtext group flex-grow overflow-y-auto rounded-sm border-4 border-solid border-primary border-opacity-80 p-5 transition-all shadow-primary hover:border-opacity-100 lg:p-5"
     >
       <page-header></page-header>
 
@@ -30,12 +31,12 @@
       >
         scroll
       </div>
-      <div class="h-full transition-all ease-in-out" id="view"></div>
+      <div class="h-full transition-all max-w-full overflow-x-hidden ease-in-out" id="view"></div>
     </div>
   </div>
   
     <nav-menu id="header"
-    class="flex max-h-24 md:max-h-max select-none items-center justify-center transition-colors ease-in-out "
+    class="crtext flex max-h-24 md:max-h-max select-none items-center justify-center transition-colors ease-in-out "
     ></nav-menu>
      
     <music-player></music-player>

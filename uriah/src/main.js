@@ -54,7 +54,7 @@ bgGeometry.setAttribute(
 
 // bgScene.background = new THREE.Color(0x010101);
 
-const bgTexture = new THREE.TextureLoader().load("star-texture.png");
+const bgTexture = new THREE.TextureLoader().load("/images/star-texture.png");
 const bgMaterial = new THREE.PointsMaterial({
   sizeAttenuation: true,
   color: "white",
@@ -83,7 +83,11 @@ bgScene.add(bgCamera);
 
 // renderererer
 const canvas = document.querySelector("#bg");
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  preserveDrawingBuffer: false,
+});
 // renderer.premultipliedAlpha = false;
 
 // renderer.setPixelRatio(window.devicePixelRatio);
@@ -209,46 +213,46 @@ function tweenYRotation(targetRSpeed) {
 // rerenderer
 
 // let clock = new THREE.Clock();
-let delta = 0;
-let interval = 1000 / 120;
+let lastFrameTime = 0;
+const interval = 1000 / 120;
+const maxDeltaTime = 15;
 
 function bgAnimate(timestamp) {
-  // delta += clock.getDelta();
+  if (lastFrameTime === 0) {
+    lastFrameTime = timestamp;
+    requestAnimationFrame(bgAnimate);
+    return;
+  }
 
-  if (timestamp - delta > interval) {
+  let deltaTime = timestamp - lastFrameTime;
+  deltaTime = Math.min(deltaTime, maxDeltaTime);
+
+  if (deltaTime >= interval) {
+    lastFrameTime = timestamp - (deltaTime % interval);
+
     TWEEN.update();
-    // console.log( ySpeed )
+
     const positions = bgGeometry.getAttribute("position").array;
-
     for (let i = 0; i < positions.length; i += 3) {
-      // let x = positions[i];
       let y = positions[i + 1];
-      // let z = positions[i + 2];
-
-      // y -= 1;
-      y -= ySpeed;
+      // Scale movement by deltaTime to make it consistent
+      y -= ySpeed * (deltaTime / interval);
 
       if (y < -800) {
-        // y = 1000
         y = Math.random() * 101 + 800;
       }
-
-      positions[i + 1] = y; // update the modified y-coordinate
+      positions[i + 1] = y;
     }
-    // star rotation controls
-    stars.rotation.y += yRotation;
+
+    stars.rotation.y += yRotation * (deltaTime / interval);
 
     bgGeometry.getAttribute("position").needsUpdate = true;
-
-    // setTimeout(function () {
-    //     window.requestAnimationFrame(bgAnimate)
-    // }, 1000 / 60)
     renderer.render(bgScene, bgCamera);
-    delta = timestamp;
   }
+
   requestAnimationFrame(bgAnimate);
 }
-bgAnimate();
+bgAnimate(0);
 
 // BACKGROUND SCENE END, MENU SCENE BEGIN
 
@@ -266,7 +270,7 @@ const loader = new GLTFLoader();
 let eyeMesh;
 let mixer;
 loader.load(
-  "../../assets/models/eyeball.glb",
+  "/models/eyeball.glb",
   function (gltf) {
     gltf.scene.scale.set(1.8, 1.8, 1.8);
     gltf.scene.castShadow = true;
@@ -291,8 +295,10 @@ loader.load(
 let action, action1; // Declare variables for the actions
 
 let lidMesh;
+let isBlinking = false;
+let blinkTimeout;
 loader.load(
-  "../../assets/models/eyelids.glb",
+  "/models/eyelids.glb",
   function (gltf) {
     gltf.scene.scale.set(1.8, 1.8, 1.8);
     gltf.scene.castShadow = true;
@@ -308,6 +314,9 @@ loader.load(
     // Store the actions in the global variables
     action = mixer.clipAction(blinkTop);
     action1 = mixer.clipAction(blinkBot);
+    mixer.addEventListener("finished", (e) => {
+      isBlinking = false;
+    });
 
     // Optionally, play the animations initially or keep them paused for later use
     action.clampWhenFinished = true; // Stop at the last frame
@@ -325,15 +334,29 @@ loader.load(
   }
 );
 
-// Call this function whenever you want to play the animations
 function playBlinkAnimation() {
-  if (action && action1) {
-    action.reset().play(); // Reset to the beginning and play
+  if (action && action1 && !isBlinking) {
+    isBlinking = true;
+    const randomSpeed = Math.random() * 0.4 + 0.8;
+    action.timeScale = randomSpeed;
+    action1.timeScale = randomSpeed;
+    action.reset().play();
     action1.reset().play();
+    setNextBlink();
+  } else if (isBlinking) {
+    setNextBlink();
   }
+}
+function setNextBlink() {
+  if (blinkTimeout) clearTimeout(blinkTimeout);
+  const delay = Math.random() * 4000 + 1000;
+  blinkTimeout = setTimeout(() => {
+    playBlinkAnimation();
+  }, delay);
 }
 
 document.addEventListener("click", function () {
+  if (blinkTimeout) clearTimeout(blinkTimeout);
   playBlinkAnimation();
 });
 
@@ -390,95 +413,134 @@ const intersectPoint = new THREE.Vector3();
 const lidIntersectPoint = new THREE.Vector3();
 const eyeDiv = document.getElementById("eyebox");
 const speed = 150;
+let idle = true;
+let manualTimeout;
 
 function onMouseMove(event) {
+  idle = false;
+  clearTimeout(manualTimeout);
+  DBeyeWander();
   setTimeout(function () {
     if (eyeMesh) {
-      const centerPoint =
-        eyeDiv.getBoundingClientRect().top + eyeSizes.height / 2;
-      const offsetY = centerPoint / sizes.height;
-
-      mouse.x = (event.clientX / sizes.width) * 120 - 60;
-      mouse.y = -(event.clientY / sizes.height) * 100 + 100 * offsetY;
-      lidMouse.x = (event.clientX / sizes.width) * 50 - 25;
-      lidMouse.y = -(event.clientY / sizes.height) * 40 + 40 * offsetY;
-
-      // get the x y coords of the center
-      const eyeRect = eyeDiv.getBoundingClientRect();
-      const centerX = eyeRect.left + eyeRect.width / 2;
-      const centerY = eyeRect.top + eyeRect.height / 2;
-
-      // get the maximum possible distance to each corner
-      const distance = Math.sqrt(
-        (event.clientX - centerX) ** 2 + (event.clientY - centerY) ** 2
-      );
-      const distTopLeft = Math.sqrt(centerX ** 2 + centerY ** 2);
-      const distTopRight = Math.sqrt(
-        (window.innerWidth - centerX) ** 2 + centerY ** 2
-      );
-      const distBottomLeft = Math.sqrt(
-        centerX ** 2 + (window.innerHeight - centerY) ** 2
-      );
-      const distBottomRight = Math.sqrt(
-        (window.innerWidth - centerX) ** 2 + (window.innerHeight - centerY) ** 2
-      );
-      // returns the greatest number
-      const maxDistance = Math.max(
-        distTopLeft,
-        distTopRight,
-        distBottomLeft,
-        distBottomRight
-      );
-      const normalizedDistance = distance / maxDistance;
-      // linear interpolation between 50 and 120
-      const intersectZAdjusted =
-        35 * (1 - normalizedDistance) + 150 * normalizedDistance;
-
-      raycaster.setFromCamera(mouse, eyeCamera);
-      lidRaycaster.setFromCamera(lidMouse, eyeCamera);
-      raycaster.ray.intersectPlane(plane, intersectPoint);
-      lidRaycaster.ray.intersectPlane(plane, lidIntersectPoint);
-      intersectPoint.z = intersectZAdjusted;
-      lidIntersectPoint.z = intersectZAdjusted;
-
-      const startQuaternion = eyeMesh.quaternion.clone();
-      const lStartQuaternion = lidMesh.quaternion.clone();
-
-      eyeMesh.lookAt(intersectPoint);
-      lidMesh.lookAt(lidIntersectPoint);
-
-      const endQuaternion = eyeMesh.quaternion.clone();
-      const lEndQuaternion = lidMesh.quaternion.clone();
-
-      eyeMesh.quaternion.copy(startQuaternion);
-      lidMesh.quaternion.copy(lStartQuaternion);
-
-      const eyeTween = new TWEEN.Tween(eyeMesh.quaternion)
-        .to(
-          {
-            x: endQuaternion.x,
-            y: endQuaternion.y,
-            z: endQuaternion.z,
-            w: endQuaternion.w,
-          },
-          speed
-        )
-        .easing(TWEEN.Easing.Quadratic.Out);
-      const lidTween = new TWEEN.Tween(lidMesh.quaternion)
-        .to(
-          {
-            x: lEndQuaternion.x,
-            y: lEndQuaternion.y,
-            z: lEndQuaternion.z,
-            w: lEndQuaternion.w,
-          },
-          speed
-        )
-        .easing(TWEEN.Easing.Quadratic.Out);
-      lidTween.start();
-      eyeTween.start();
+      eyeMove(event);
     }
   }, speed);
+}
+
+function eyeMove(arg, manual = false) {
+  // console.log("arg: ", arg);
+  const centerPoint = eyeDiv.getBoundingClientRect().top + eyeSizes.height / 2;
+  const offsetY = centerPoint / sizes.height;
+  if (manual) {
+    const randomX = Math.random() * (sizes.width - 400) + 400; // Random X within screen width
+    const randomY = Math.random() * (sizes.height + 800) - 200; // Random Y within screen height
+    arg = { clientX: randomX, clientY: randomY }; // Create a synthetic event-like object
+  }
+
+  mouse.x = (arg.clientX / sizes.width) * 120 - 60;
+  mouse.y = -(arg.clientY / sizes.height) * 100 + 100 * offsetY;
+  lidMouse.x = (arg.clientX / sizes.width) * 50 - 25;
+  lidMouse.y = -(arg.clientY / sizes.height) * 40 + 40 * offsetY;
+
+  // get the x y coords of the center
+  const eyeRect = eyeDiv.getBoundingClientRect();
+  const centerX = eyeRect.left + eyeRect.width / 2;
+  const centerY = eyeRect.top + eyeRect.height / 2;
+
+  // get the maximum possible distance to each corner
+  const distance = Math.sqrt(
+    (arg.clientX - centerX) ** 2 + (arg.clientY - centerY) ** 2
+  );
+  const distTopLeft = Math.sqrt(centerX ** 2 + centerY ** 2);
+  const distTopRight = Math.sqrt(
+    (window.innerWidth - centerX) ** 2 + centerY ** 2
+  );
+  const distBottomLeft = Math.sqrt(
+    centerX ** 2 + (window.innerHeight - centerY) ** 2
+  );
+  const distBottomRight = Math.sqrt(
+    (window.innerWidth - centerX) ** 2 + (window.innerHeight - centerY) ** 2
+  );
+  // returns the greatest number
+  const maxDistance = Math.max(
+    distTopLeft,
+    distTopRight,
+    distBottomLeft,
+    distBottomRight
+  );
+  const normalizedDistance = distance / maxDistance;
+  // linear interpolation between 50 and 120
+  const intersectZAdjusted =
+    35 * (1 - normalizedDistance) + 150 * normalizedDistance;
+
+  raycaster.setFromCamera(mouse, eyeCamera);
+  lidRaycaster.setFromCamera(lidMouse, eyeCamera);
+  raycaster.ray.intersectPlane(plane, intersectPoint);
+  lidRaycaster.ray.intersectPlane(plane, lidIntersectPoint);
+  intersectPoint.z = intersectZAdjusted;
+  lidIntersectPoint.z = intersectZAdjusted;
+
+  const startQuaternion = eyeMesh.quaternion.clone();
+  const lStartQuaternion = lidMesh.quaternion.clone();
+
+  eyeMesh.lookAt(intersectPoint);
+  lidMesh.lookAt(lidIntersectPoint);
+
+  const endQuaternion = eyeMesh.quaternion.clone();
+  const lEndQuaternion = lidMesh.quaternion.clone();
+
+  eyeMesh.quaternion.copy(startQuaternion);
+  lidMesh.quaternion.copy(lStartQuaternion);
+
+  const eyeTween = new TWEEN.Tween(eyeMesh.quaternion)
+    .to(
+      {
+        x: endQuaternion.x,
+        y: endQuaternion.y,
+        z: endQuaternion.z,
+        w: endQuaternion.w,
+      },
+      speed
+    )
+    .easing(TWEEN.Easing.Quadratic.Out);
+  const lidTween = new TWEEN.Tween(lidMesh.quaternion)
+    .to(
+      {
+        x: lEndQuaternion.x,
+        y: lEndQuaternion.y,
+        z: lEndQuaternion.z,
+        w: lEndQuaternion.w,
+      },
+      speed
+    )
+    .easing(TWEEN.Easing.Quadratic.Out);
+  lidTween.start();
+  eyeTween.start();
+}
+
+const DBeyeWander = debounce(eyeWander);
+function eyeWander() {
+  idle = true;
+  if (manualTimeout) clearTimeout(manualTimeout);
+  // eyeMove(null, true);
+  function moveAndReset() {
+    if (idle) {
+      eyeMove(null, true);
+      const delay = Math.random() * 1500 + speed;
+      manualTimeout = setTimeout(moveAndReset, delay);
+    }
+  }
+  moveAndReset();
+}
+
+function debounce(func, timeout = 2000) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
+  };
 }
 
 // change color theme
@@ -699,16 +761,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   const eyeBox = document.querySelector("#eyebox");
+  const pixelFactor = 0.2;
+  const smallWidth = Math.floor(eyeSizes.width * pixelFactor);
+  const smallHeight = Math.floor(eyeSizes.height * pixelFactor);
+
   const eyeRenderer = new THREE.WebGLRenderer({
     canvas: eyeBox,
     alpha: true,
-    antialias: true,
+    antialias: false,
+    preserveDrawingBuffer: false,
   });
 
-  eyeRenderer.setSize(eyeSizes.width, eyeSizes.height);
-  eyeRenderer.setPixelRatio(window.devicePixelRatio * 0.2);
+  eyeRenderer.setSize(smallWidth, smallHeight, false);
+  eyeRenderer.setPixelRatio(window.devicePixelRatio);
+
   eyeRenderer.render(eyeScene, eyeCamera);
 
+  eyeBox.style.width = `${eyeSizes.width}px`;
+  eyeBox.style.height = `${eyeSizes.height}px`;
+  eyeBox.style.imageRendering = 'pixelated'; // Modern browsers
   let eyeClock = new THREE.Clock();
   let eyeDelta = 0;
   let eyeInterval = 1 / 120;
@@ -728,6 +799,7 @@ document.addEventListener("DOMContentLoaded", () => {
       eyeRenderer.render(eyeScene, eyeCamera);
     }
   };
+  setNextBlink();
 
   eyeLoop();
 });
@@ -851,7 +923,7 @@ document.addEventListener("DOMContentLoaded", function () {
           window.requestAnimationFrame(() => {
             setTimeout(() => {
               showOrHideScroll();
-            }, 200);
+            }, 1000);
           });
         });
       });
