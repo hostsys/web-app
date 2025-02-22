@@ -124,15 +124,6 @@
   font-family: "Birch Leaf";
   src: url("/fonts/BirchLeaf.ttf");
 }
-@font-face {
-  font-family: "Perfect DOS";
-  src: url("/fonts/Perfect\ DOS\ VGA\ 437\ Win.ttf");
-}
-@font-face {
-  font-family: "Runescape";
-  src: url("/fonts/runescape_uf.ttf");
-}
-
 /* * {
 } */
 
