@@ -21,13 +21,13 @@ class Sfx {
 }
 
 const longSfx = new Sfx(
-  "http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/bonus.wav"
+  "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/bonus.wav"
 );
 const hoverSfx = new Sfx(
-  "http://commondatastorage.googleapis.com/codeskulptor-demos/pyman_assets/eatpellet.ogg"
+  "https://commondatastorage.googleapis.com/codeskulptor-demos/pyman_assets/eatpellet.ogg"
 );
 const shortSfx = new Sfx(
-  "http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/alien_shoot.wav"
+  "https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/alien_shoot.wav"
 );
 
 document.addEventListener("click", (e) => {

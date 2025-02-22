@@ -99,7 +99,7 @@ class TheBox extends HTMLElement {
     const ipReplaceElement = document.getElementById("box-body");
     this.replaceInText(ipReplaceElement, "ipAddress", ip);
 
-    const locationResponse = await fetch(`http://ip-api.com/json/${ip}`);
+    const locationResponse = await fetch(`https://ip-api.com/json/${ip}`);
     const locationData = await locationResponse.json();
     const locationCity = locationData.city.toLowerCase();
 
@@ -182,7 +182,7 @@ class TheBox extends HTMLElement {
     return dimensions;
   }
 
-  disconnectedCallback() {}
+  disconnectedCallback() { }
 }
 
 customElements.define(TheBox.tagName, TheBox);

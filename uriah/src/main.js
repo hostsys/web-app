@@ -54,7 +54,7 @@ bgGeometry.setAttribute(
 
 // bgScene.background = new THREE.Color(0x010101);
 
-const bgTexture = new THREE.TextureLoader().load("/images/star-texture.png");
+const bgTexture = new THREE.TextureLoader().load("/public/images/star-texture.png");
 const bgMaterial = new THREE.PointsMaterial({
   sizeAttenuation: true,
   color: "white",
@@ -270,7 +270,7 @@ const loader = new GLTFLoader();
 let eyeMesh;
 let mixer;
 loader.load(
-  "/models/eyeball.glb",
+  "/public/models/eyeball.glb",
   function (gltf) {
     gltf.scene.scale.set(1.8, 1.8, 1.8);
     gltf.scene.castShadow = true;
@@ -298,7 +298,7 @@ let lidMesh;
 let isBlinking = false;
 let blinkTimeout;
 loader.load(
-  "/models/eyelids.glb",
+  "/public/models/eyelids.glb",
   function (gltf) {
     gltf.scene.scale.set(1.8, 1.8, 1.8);
     gltf.scene.castShadow = true;
