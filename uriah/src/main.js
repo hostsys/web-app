@@ -89,6 +89,7 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true,
   preserveDrawingBuffer: false,
 });
+canvas.style.imageRendering = 'pixelated';
 // renderer.premultipliedAlpha = false;
 
 // renderer.setPixelRatio(window.devicePixelRatio);
@@ -781,28 +782,35 @@ document.addEventListener("DOMContentLoaded", () => {
   eyeBox.style.width = `${eyeSizes.width}px`;
   eyeBox.style.height = `${eyeSizes.height}px`;
   eyeBox.style.imageRendering = 'pixelated'; // Modern browsers
-  let eyeClock = new THREE.Clock();
-  let eyeDelta = 0;
-  let eyeInterval = 1 / 120;
+  let lastEyeFrameTime = 0;
+  const eyeInterval = 1000 / 120;
+  const maxEyeDeltaTime = 15;
 
-  const eyeLoop = (t) => {
-    if (mixer) {
-      mixer.update(eyeClock.getDelta());
+  const eyeLoop = (timestamp) => {
+    if (lastEyeFrameTime === 0) {
+      lastEyeFrameTime = timestamp;
+      requestAnimationFrame(eyeLoop);
+      return;
     }
 
-    window.requestAnimationFrame(eyeLoop);
-    eyeDelta += eyeClock.getDelta();
+    let deltaTime = timestamp - lastEyeFrameTime;
+    deltaTime = Math.min(deltaTime, maxEyeDeltaTime);
 
-    if (eyeDelta > eyeInterval) {
-      TWEEN.update(t);
-      // /*  */eyeMesh.rotation.x -= 0.001
+    if (deltaTime >= eyeInterval) {
+      lastEyeFrameTime = timestamp - (deltaTime % eyeInterval);
+      if (mixer) {
+        mixer.update(deltaTime / 1000);
+      }
 
+      TWEEN.update(timestamp);
       eyeRenderer.render(eyeScene, eyeCamera);
     }
-  };
-  setNextBlink();
 
-  eyeLoop();
+    requestAnimationFrame(eyeLoop);
+  };
+
+  setNextBlink();
+  eyeLoop(0);
 });
 
 // anims

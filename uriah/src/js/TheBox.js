@@ -61,7 +61,6 @@ class TheBox extends HTMLElement {
       token: this.getToken(),
       dimensions: this.getDimensions(),
     };
-    console.log(data);
     // return;
 
     const response = await fetch(
@@ -76,7 +75,6 @@ class TheBox extends HTMLElement {
     );
 
     const responseJSON = await response.json();
-    console.log(responseJSON);
     if (responseJSON.status == "OK") {
       sfx("click");
       this.theBox.classList.add("spin-on-event");
@@ -99,16 +97,16 @@ class TheBox extends HTMLElement {
     const ipReplaceElement = document.getElementById("box-body");
     this.replaceInText(ipReplaceElement, "ipAddress", ip);
 
-    const locationResponse = await fetch(`https://ip-api.com/json/${ip}`);
+    const locationResponse = await fetch(`https://freeipapi.com/api/json/${ip}`);
     const locationData = await locationResponse.json();
-    const locationCity = locationData.city.toLowerCase();
+    const locationCity = locationData.cityName.toLowerCase();
 
     const locationReplaceElement = document.getElementById("box-body");
     this.replaceInText(locationReplaceElement, "locationData", locationCity);
 
     const data = {
       ip: ip,
-      coords: `${locationData.lat},${locationData.lon}`,
+      coords: `${locationData.latitude},${locationData.longitude}`,
     };
 
     return data;

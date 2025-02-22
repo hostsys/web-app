@@ -20,8 +20,9 @@
   >    
     <canvas id="bg"></canvas>
 
+    <div id="backdrop" class="fixed z-10 w-screen h-screen inset-0 backdrop-blur-sm">
       <dialog
-        class="backdrop-blur-sm z-30 p-4 inset-0 border-2 border-opacity-80 hover:border-opacity-100 border-primary bg-transparent text-primary transition-all"
+        class="z-30 p-4 inset-0 border-2 border-opacity-80 hover:border-opacity-100 border-primary bg-transparent text-primary transition-all"
           open
       >
         <h3 class="text-xl">enter?</h3>
@@ -40,6 +41,7 @@
           </button>
         </form>
       </dialog>
+    </div>
  
     <div
         id="content"
@@ -123,16 +125,6 @@
   background-color: rgb(var(--color-primary));
   }
 
-  dialog::backdrop {
-    background-color: black;
-    opacity: 0.8;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    /* z-index: 10; */
-  }
 </style>
 
 <script>
@@ -156,9 +148,11 @@ getBoxes()
 
 const enter = document.getElementById('enterBtn')
 const nvm = document.getElementById('neverMind')
+const backdrop = document.getElementById('backdrop')
 const faders = ['content', 'header', 'musicPlayer']
 
 enter.addEventListener('click', () => {
+  backdrop.classList.add('hidden')
   faders.forEach(fader => {
     document.getElementById(fader).classList.add('opacity-100')
   })

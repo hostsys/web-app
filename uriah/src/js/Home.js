@@ -95,6 +95,7 @@ class Home extends HTMLElement {
     // cube.rotation.z = 0.5;
     // scene.add(cube);
 
+    container.style.imageRendering = 'pixelated';
     const renderer = new THREE.WebGLRenderer({
       canvas: container,
       alpha: true,

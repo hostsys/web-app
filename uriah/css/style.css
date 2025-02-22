@@ -813,6 +813,10 @@ a:active,
   height: min-content;
 }
 
+.h-screen {
+  height: 100vh;
+}
+
 .max-h-20 {
   max-height: 5rem;
 }
@@ -872,6 +876,10 @@ a:active,
 .w-min {
   width: -moz-min-content;
   width: min-content;
+}
+
+.w-screen {
+  width: 100vw;
 }
 
 .max-w-\[12\] {
@@ -1122,6 +1130,11 @@ a:active,
 
 .bg-transparent {
   background-color: transparent;
+}
+
+.bg-red-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 165 165 / var(--tw-bg-opacity, 1));
 }
 
 .bg-gradient-to-r {
