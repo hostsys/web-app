@@ -2,6 +2,7 @@ import axios from "axios";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as TWEEN from "@tweenjs/tween.js";
+const BASE_URL = import.meta.env.BASE_URL
 
 // const app = createApp(App);
 
@@ -54,7 +55,7 @@ bgGeometry.setAttribute(
 
 // bgScene.background = new THREE.Color(0x010101);
 
-const bgTexture = new THREE.TextureLoader().load("/public/images/star-texture.png");
+const bgTexture = new THREE.TextureLoader().load(`${BASE_URL}images/star-texture.png`);
 const bgMaterial = new THREE.PointsMaterial({
   sizeAttenuation: true,
   color: "white",
@@ -270,7 +271,7 @@ const loader = new GLTFLoader();
 let eyeMesh;
 let mixer;
 loader.load(
-  "/public/models/eyeball.glb",
+  `${BASE_URL}models/eyeball.glb`,
   function (gltf) {
     gltf.scene.scale.set(1.8, 1.8, 1.8);
     gltf.scene.castShadow = true;
@@ -298,7 +299,7 @@ let lidMesh;
 let isBlinking = false;
 let blinkTimeout;
 loader.load(
-  "/public/models/eyelids.glb",
+  `${BASE_URL}models/eyelids.glb`,
   function (gltf) {
     gltf.scene.scale.set(1.8, 1.8, 1.8);
     gltf.scene.castShadow = true;
