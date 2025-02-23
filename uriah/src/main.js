@@ -2,6 +2,7 @@ import axios from "axios";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as TWEEN from "@tweenjs/tween.js";
+// import { modelScale } from "three/src/nodes/TSL.js";
 const BASE_URL = import.meta.env.BASE_URL
 
 // const app = createApp(App);
@@ -89,13 +90,22 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true,
   preserveDrawingBuffer: false,
 });
-canvas.style.imageRendering = 'pixelated';
-// renderer.premultipliedAlpha = false;
 
-// renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setPixelRatio(window.devicePixelRatio / 3);
-renderer.setSize(sizes.width, sizes.height);
-renderer.render(bgScene, bgCamera);
+function updateRatio() {
+  const bgScaleFactor = 0.33
+  const scaledW = Math.floor(sizes.width * bgScaleFactor)
+  const scaledH = Math.floor(sizes.height * bgScaleFactor)
+  canvas.style.width = `${sizes.width}px`
+  canvas.style.height = `${sizes.height}px`
+  canvas.style.imageRendering = 'pixelated';
+  renderer.setPixelRatio(1);
+  renderer.setSize(scaledW, scaledH, false);
+  bgCamera.aspect = sizes.width / sizes.height;
+  bgCamera.updateProjectionMatrix();
+  renderer.render(bgScene, bgCamera);
+
+}
+updateRatio()
 
 // resize
 window.addEventListener("resize", () => {
@@ -103,9 +113,7 @@ window.addEventListener("resize", () => {
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
   // tell the camera
-  bgCamera.aspect = sizes.width / sizes.height;
-  bgCamera.updateProjectionMatrix();
-  renderer.setSize(sizes.width, sizes.height);
+  updateRatio()
 });
 
 // rotation q and e
@@ -271,29 +279,101 @@ const eyeScene = new THREE.Scene();
 const loader = new GLTFLoader();
 let eyeMesh;
 let mixer;
-loader.load(
-  `${BASE_URL}models/eyeball.glb`,
-  function (gltf) {
-    gltf.scene.scale.set(1.8, 1.8, 1.8);
-    gltf.scene.castShadow = true;
 
-    eyeMesh = gltf.scene;
+function loadEye(path) {
+  return new Promise((resolve, reject) => {
+    loader.load(
+      `${BASE_URL}models/${path}`,
+      function (gltf) {
+        gltf.scene.scale.set(1.8, 1.8, 1.8);
+        gltf.scene.castShadow = true;
 
-    // eyeScene.add(gltf.scene);
-    // loadedModel = gltf.scene;
-    // const eyeOrigin = new THREE.Vector3(0, 0, 0);
-    // eyeMesh.position.x = 0;
-    // eyeMesh.position.z = 0;
-    // eyeMesh.rotation.x = 90;
-    // eyeMesh.lookAt(eyeOrigin);
+        const quaternion = eyeMesh ? eyeMesh.quaternion.clone() : new THREE.Quaternion();
 
-    eyeScene.add(eyeMesh);
-  },
-  undefined,
-  function (error) {
-    console.log(error);
+        resolve({
+          scene: gltf.scene,
+          quaternion: quaternion
+        });
+      },
+      undefined,
+      function (error) {
+        console.error('model error: ', error);
+        reject(error);
+      }
+    );
+  });
+}
+
+const cache = new Map();
+async function switchModel(path) {
+  try {
+    if (cache.has(path)) {
+      const cachedModel = cache.get(path);
+      const currentQuaternion = eyeMesh.quaternion.clone();
+
+      eyeScene.remove(eyeMesh);
+      eyeMesh = cachedModel;
+
+      eyeMesh.quaternion.copy(currentQuaternion);
+      eyeScene.add(eyeMesh);
+    } else {
+      const modelData = await loadEye(path);
+      if (eyeMesh) {
+        modelData.scene.quaternion.copy(eyeMesh.quaternion);
+        eyeScene.remove(eyeMesh);
+      }
+
+      eyeMesh = modelData.scene;
+      cache.set(path, eyeMesh);
+      eyeScene.add(eyeMesh);
+    }
+  } catch (err) {
+    console.error('switch error: ', err);
+    throw err;
   }
-);
+}
+
+switchModel('eyeball.glb').then(() => {
+  console.log('base eye loaded')
+})
+
+function switchMaterial(newMaterial) {
+  const oldMaterial = eyeMesh.material;
+  new TWEEN.Tween(oldMaterial)
+    .to({ opacity: 0 }, 200)
+    .onComplete(() => {
+      eyeMesh.material = newMaterial;
+      newMaterial.opacity = 0;
+      new TWEEN.Tween(newMaterial)
+        .to({ opacity: 1 }, 200)
+        .start();
+    })
+    .start();
+}
+
+// loader.load(
+//   `${BASE_URL}models/eyeball.glb`,
+//   function (gltf) {
+//     gltf.scene.scale.set(1.8, 1.8, 1.8);
+//     gltf.scene.castShadow = true;
+//
+//     eyeMesh = gltf.scene;
+//
+//     // eyeScene.add(gltf.scene);
+//     // loadedModel = gltf.scene;
+//     // const eyeOrigin = new THREE.Vector3(0, 0, 0);
+//     // eyeMesh.position.x = 0;
+//     // eyeMesh.position.z = 0;
+//     // eyeMesh.rotation.x = 90;
+//     // eyeMesh.lookAt(eyeOrigin);
+//
+//     eyeScene.add(eyeMesh);
+//   },
+//   undefined,
+//   function (error) {
+//     console.log(error);
+//   }
+// );
 let action, action1; // Declare variables for the actions
 
 let lidMesh;
@@ -509,7 +589,7 @@ function eyeMove(arg, manual = false) {
     .to(
       {
         x: lEndQuaternion.x,
-        y: lEndQuaternion.y,
+        y: lEndQuaternion.ymusic,
         z: lEndQuaternion.z,
         w: lEndQuaternion.w,
       },
@@ -729,26 +809,32 @@ document.addEventListener("DOMContentLoaded", () => {
             //   eyeMesh.geometry = eyeShape;
             // }, 300);
             // eyeMaterial.color.set("purple");
+            switchModel('eyeball-home.glb')
             break;
 
           case "portfolio":
             // eyeMaterial.color.set("blue");
+            switchModel('eyeball-portfolio.glb')
             break;
 
           case "music":
             // eyeMaterial.color.set("yellow");
+            switchModel('eyeball-music.glb')
             break;
 
           case "gallery":
             // eyeMaterial.color.set("green");
+            switchModel('eyeball-gallery.glb')
             break;
 
           case "the-box":
             // eyeMaterial.color.set("orange");
+            switchModel('eyeball-box.glb')
             break;
 
           case "controls":
             // eyeMaterial.color.set("cyan");
+            switchModel('eyeball-controls.glb')
             break;
 
           default:
@@ -759,11 +845,12 @@ document.addEventListener("DOMContentLoaded", () => {
       child.addEventListener("mouseout", function () {
         // const itemID = this.id;
         // eyeMaterial.color.set("white");
+        switchModel('eyeball.glb')
       });
     }
   }
   const eyeBox = document.querySelector("#eyebox");
-  const pixelFactor = 0.2;
+  const pixelFactor = 0.25;
   const smallWidth = Math.floor(eyeSizes.width * pixelFactor);
   const smallHeight = Math.floor(eyeSizes.height * pixelFactor);
 
@@ -775,13 +862,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   eyeRenderer.setSize(smallWidth, smallHeight, false);
-  eyeRenderer.setPixelRatio(window.devicePixelRatio);
+  eyeRenderer.setPixelRatio(1);
 
   eyeRenderer.render(eyeScene, eyeCamera);
 
   eyeBox.style.width = `${eyeSizes.width}px`;
   eyeBox.style.height = `${eyeSizes.height}px`;
-  eyeBox.style.imageRendering = 'pixelated'; // Modern browsers
+  eyeBox.style.imageRendering = 'pixelated';
   let lastEyeFrameTime = 0;
   const eyeInterval = 1000 / 120;
   const maxEyeDeltaTime = 15;

@@ -2,7 +2,7 @@ import html from "../pages/home.html";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { sfx } from "./sfx";
-import html2canvas from "html2canvas-pro";
+const BASE_URL = import.meta.env.BASE_URL
 
 class Home extends HTMLElement {
   static get tagName() {
@@ -66,7 +66,7 @@ class Home extends HTMLElement {
     const loader = new GLTFLoader();
     let loadedModel;
     loader.load(
-      "/models/seren.glb",
+      `${BASE_URL}models/seren.glb`,
       function (gltf) {
         gltf.scene.scale.set(1000, 1000, 1000);
         gltf.scene.castShadow = true;
@@ -95,7 +95,6 @@ class Home extends HTMLElement {
     // cube.rotation.z = 0.5;
     // scene.add(cube);
 
-    container.style.imageRendering = 'pixelated';
     const renderer = new THREE.WebGLRenderer({
       canvas: container,
       alpha: true,
@@ -103,8 +102,14 @@ class Home extends HTMLElement {
       preserveDrawingBuffer: false,
     });
     renderer.shadowMapEnabled = true;
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(window.devicePixelRatio * 0.3);
+    const bgScaleFactor = 0.33
+    const scaledW = Math.floor(sizes.width * bgScaleFactor)
+    const scaledH = Math.floor(sizes.height * bgScaleFactor)
+    container.style.width = `${sizes.width}px`
+    container.style.height = `${sizes.height}px`
+    container.style.imageRendering = 'pixelated';
+    renderer.setPixelRatio(1);
+    renderer.setSize(scaledW, scaledH, false);
     // container.appendChild(renderer.domElement);
     // console.log(renderer.domElement);
 
