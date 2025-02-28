@@ -61,7 +61,6 @@ class TheBox extends HTMLElement {
       token: this.getToken(),
       dimensions: this.getDimensions(),
     };
-    // return;
 
     const response = await fetch(
       "https://uriah.website/wp-json/hs/v1/send-boxes",

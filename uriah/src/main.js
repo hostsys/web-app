@@ -142,12 +142,19 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.addEventListener("keydown", (downEvent) => {
-  //case of q
-  if (downEvent.key.toLowerCase() === "a") {
-    tweenYRotation(-yRSpeed);
-  } //case of e
-  else if (downEvent.key.toLowerCase() === "d") {
-    tweenYRotation(yRSpeed);
+
+  const activeElement = document.activeElement
+  const isTyping = activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA"
+
+  if (!isTyping) {
+
+    if (downEvent.key.toLowerCase() === "a") {
+      tweenYRotation(-yRSpeed);
+    }
+    else if (downEvent.key.toLowerCase() === "d") {
+      tweenYRotation(yRSpeed);
+    }
+
   }
 });
 // release
@@ -182,10 +189,15 @@ function cameraControls(directive) {
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.key.toLowerCase() === "s" && !speedChangeInProgress) {
-    tweenYSpeed(0.3, 800, TWEEN.Easing.Sinusoidal.In);
-  } else if (event.key.toLowerCase() === "w" && !speedChangeInProgress) {
-    tweenYSpeed(ySpeedW, 800, TWEEN.Easing.Quartic.In);
+  const activeElement = document.activeElement
+  const isTyping = activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA"
+
+  if (!isTyping) {
+    if (event.key.toLowerCase() === "s" && !speedChangeInProgress) {
+      tweenYSpeed(0.3, 800, TWEEN.Easing.Sinusoidal.In);
+    } else if (event.key.toLowerCase() === "w" && !speedChangeInProgress) {
+      tweenYSpeed(ySpeedW, 800, TWEEN.Easing.Quartic.In);
+    }
   }
 });
 
@@ -333,9 +345,7 @@ async function switchModel(path) {
   }
 }
 
-switchModel('eyeball.glb').then(() => {
-  console.log('base eye loaded')
-})
+switchModel('eyeball.glb')
 
 function switchMaterial(newMaterial) {
   const oldMaterial = eyeMesh.material;
@@ -742,8 +752,13 @@ const shadowClass = "shadow-[0_0_25px]";
 changeTheme("defaultTheme");
 
 window.addEventListener("keydown", (downEvent) => {
-  const key = downEvent.key.toLowerCase();
-  changeThemeByKey(key);
+  const activeElement = document.activeElement
+  const isTyping = activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA"
+
+  if (!isTyping) {
+    const key = downEvent.key.toLowerCase();
+    changeThemeByKey(key);
+  }
 });
 
 function changeThemeByKey(key) {
@@ -822,9 +837,9 @@ document.addEventListener("DOMContentLoaded", () => {
             switchModel('eyeball-music.glb')
             break;
 
-          case "gallery":
+          case "guest-book":
             // eyeMaterial.color.set("green");
-            switchModel('eyeball-gallery.glb')
+            switchModel('eyeball-guest.glb')
             break;
 
           case "the-box":

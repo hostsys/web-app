@@ -69,6 +69,10 @@ const routes = {
     component: () => import("../src/js/TheBox"),
     title: "box",
   },
+  "/guest-book": {
+    component: () => import("../src/js/GuestBook"),
+    title: "guest-book",
+  },
   // "/template": {
   //   component: () => import("../src/js/componentTemplate"),
   //   title: "component template",

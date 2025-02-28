@@ -22,7 +22,7 @@
 
     <div id="backdrop" class="fixed z-10 w-screen h-screen inset-0 backdrop-blur-sm">
       <dialog
-        class="z-30 p-4 inset-0 border-2 border-opacity-80 hover:border-opacity-100 border-primary bg-transparent text-primary transition-all"
+        class="z-30 p-4 inset-0 border-2 border-opacity-80 group hover:border-opacity-100 border-primary bg-transparent text-primary transition-all"
           open
       >
         <h3 class="text-xl">enter?</h3>
@@ -150,6 +150,10 @@ const enter = document.getElementById('enterBtn')
 const nvm = document.getElementById('neverMind')
 const backdrop = document.getElementById('backdrop')
 const faders = ['content', 'header', 'musicPlayer']
+  faders.forEach(fader => {
+    document.getElementById(fader).classList.add('opacity-100')
+  })
+backdrop.classList.add('hidden')
 
 enter.addEventListener('click', () => {
   backdrop.classList.add('hidden')
