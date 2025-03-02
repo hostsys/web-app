@@ -177,14 +177,14 @@ input,
   right: 0px;
   width: calc(100%);
   height: calc(50px);
-  filter: blur(1px);
-  backdrop-filter: invert(100%) opacity(1%) blur(2px);
+  filter: blur(3px);
+  backdrop-filter: invert(100%) opacity(1%) blur(3px);
   /* backdrop-filter: opacity(100%); */
   background: no-repeat
     linear-gradient(
-      rgba(10, 0, 0, 0.5) 0%,
-      rgba(0, 10, 0, 0.2) 50%,
-      rgba(0, 0, 10, 0.5) 100%
+      rgba(10, 0, 0, 0.15) 0%,
+      rgba(0, 10, 0, 0.5) 50%,
+      rgba(0, 0, 10, 0.15) 100%
     );
   z-index: 998;
   animation: 3s scanLine infinite linear;
@@ -206,17 +206,55 @@ input,
   left: 0;
   bottom: 0;
   right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0.1) 50%, rgba(0, 0, 0, 0.25) 50%),
+  background: linear-gradient(rgba(18, 16, 18, 0.2) 50%, rgba(0, 0, 0, 0.25) 50%),
     linear-gradient(
       90deg,
-      rgba(255, 0, 0, 0.06),
-      rgba(0, 255, 0, 0.02),
-      rgba(0, 0, 255, 0.06)
+      rgba(255, 0, 0, 0.08),
+      rgba(0, 255, 0, 0.05),
+      rgba(0, 0, 255, 0.08)
     );
   z-index: 999;
-  background-size: 100% 7px, 5px 100%;
+  background-size: 100% 7px, 7px 100%;
   pointer-events: none;
+  animation: crt-shift 0.15s infinite linear, crt-flicker 8s infinite;
 }
+
+@keyframes crt-shift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 7px;
+  }
+}
+
+@keyframes crt-flicker {
+  0% {
+    opacity: 1;
+  }
+  5% {
+    opacity: 0.85;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
+  }
+  55% {
+    opacity: 0.9;
+  }
+  60% {
+    opacity: 0.95;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes textShadow {
   0% {
     text-shadow: 0.4389924193300864px 0 1px rgba(0, 30, 255, 0.5),

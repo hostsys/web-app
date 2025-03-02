@@ -13,6 +13,14 @@ class Router {
       if (!target.matches("a")) {
         return;
       }
+
+      const href = target.getAttribute("href");
+      const isExternalLink = href.startsWith("http://") ||
+        href.startsWith("https://")
+
+      if (isExternalLink) {
+        return;
+      }
       e.preventDefault();
       history.pushState({}, "", e.target.href);
       this.handleRoute(window.location.pathname);

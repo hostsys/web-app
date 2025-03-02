@@ -1,10 +1,10 @@
 <div
   class="w-full md:h-full grid grid-cols-1 md:grid-cols-2 md:gap-4 transition-colors duration-300"
 >
-  <div class="max-md:order-2" id="music-container"></div>
+  <div class="max-md:order-2 overflow-auto" id="music-container"></div>
   <template id="song-template">
     <div
-      class="w-full transition-colors duration-300 backdrop-blur-sm border-4 border-opacity-80 hover:border-opacity-100 border-primary rounded-xs my-2 gap-2 flex"
+      class="w-full transition-colors duration-300 backdrop-blur-sm border-4 border-opacity-80 hover:border-opacity-100 border-primary rounded-xs md:my-2 gap-2 flex"
     >
       <img
         id="cover-art"
@@ -19,14 +19,14 @@
             />
             <h2
               id="title"
-              class="crtext cursor-active text-scene transition-colors duration-300 hover:opacity-80 bg-primary px-2"
+              class="overflow-hidden text-ellipsis h-min line-clamp-1 text-left text-sm crtext cursor-active text-scene transition-colors duration-300 hover:opacity-80 bg-primary px-2"
             ></h2>
           </button>
         </div>
         <div
           class="row-span-1 transition-colors duration-300 text-sm col-span-9 flex gap-2 items-start"
         >
-          <a class="underline crtext" id="spotify">spotify</a>
+          <a target="_blank" rel="noopener noreferrer" class="underline crtext" id="external">external link</a>
           <div
             class="border transition-colors duration-300 border-primary border-l-2 h-8"
           ></div>
@@ -39,23 +39,21 @@
       </div>
     </div>
   </template>
-  <div class="max-md:order-1 h-min md:h-full flex flex-col justify-center">
+  <div class="max-md:order-1 md:sticky top-0 flex flex-col gap-1 justify-center">
     <h1 class="text-xl">here is a collection of some of my music</h1>
     <p>i have a distrokid account but i've yet to actually upload anything to spotify.</p> </br> 
-    <p><- placeholder shit</p> </br>
-    <p> <a class="crtext underline" href="https://soundcloud.com/schizaesthetic">here's</a> my soundcloud instead, for now<p>
   </div>
 </div>
 
 <style>
   #playing-icon {
     image-rendering: pixelated;
-    background-image: url("/images/star-texture.png");
+    background-image: url("./images/star-texture.png");
     background-size: cover;
-    -webkit-mask-image: url("/images/star-texture.png");
+    -webkit-mask-image: url("./images/star-texture.png");
     -webkit-mask-mode: alpha;
     -webkit-mask-size: cover;
-    mask-image: url("/images/star-texture.png");
+    mask-image: url("./images/star-texture.png");
     mask-mode: alpha;
     mask-size: cover;
     background-blend-mode: multiply;

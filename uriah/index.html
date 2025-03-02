@@ -30,6 +30,7 @@
           <button
             id="neverMind"
             class="cursor-active border-2 border-primary mr-1 px-2 mt-2 transition-colors-manual place-self-end"
+            formnovalidate
           >
             never mind
           </button>
@@ -150,10 +151,10 @@ const enter = document.getElementById('enterBtn')
 const nvm = document.getElementById('neverMind')
 const backdrop = document.getElementById('backdrop')
 const faders = ['content', 'header', 'musicPlayer']
-  faders.forEach(fader => {
-    document.getElementById(fader).classList.add('opacity-100')
-  })
-backdrop.classList.add('hidden')
+faders.forEach(fader => {
+  document.getElementById(fader).classList.add('opacity-100')
+})
+ backdrop.classList.add('hidden')
 
 enter.addEventListener('click', () => {
   backdrop.classList.add('hidden')
@@ -165,5 +166,57 @@ enter.addEventListener('click', () => {
   });
   window.dispatchEvent(changeSongEvent);
 })
+
+  const body = document.querySelector("#contentBody");
+  const elements = body.querySelectorAll("*");
+  function freezeSite(duration) {
+    const start = Date.now();
+    while (Date.now() - start < duration) { }
+  }
+
+  nvm.addEventListener("click", () => {
+    freezeSite(2000);
+    const rainbowEvent = new CustomEvent("colorEvent", {
+      detail: { directive: "rainbow" },
+    });
+    window.dispatchEvent(rainbowEvent);
+    const interval = setInterval(() => {
+      elements.forEach((element) => {
+        if (element.id === "bg") return;
+
+        const random1 = randomInt(-50, 50);
+        const random2 = randomInt(-50, 50);
+        const scale = randomInt(0.8, 1);
+        const rotation = randomInt(3, 5);
+        const leftRight = randomInt(0, 1);
+
+        let transform = `translate(${random1}px, ${random2}px) scale(${scale})`;
+
+        if (leftRight > 0.5) {
+          transform += ` rotate(${rotation}deg)`;
+        } else {
+          transform += ` rotate(-${rotation}deg)`;
+        }
+
+        element.style.transform = transform;
+      });
+    }, 361); 
+    setTimeout(() => {
+      while (true) {
+        for (let i = 99; i === i; i *= i) {
+          console.log(i);
+        }
+      }
+      console.log("BANG, you're dead");
+    }, 2000);
+  });
+
+  function randomInt(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+
+
+
 
 </script>

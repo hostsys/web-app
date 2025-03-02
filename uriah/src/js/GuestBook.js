@@ -213,7 +213,6 @@ class GuestBook extends HTMLElement {
 
       const guests = await fetch("https://uriah.website/wp-json/hs/v1/guests").then((response) => response.json());
       this.guests = guests
-      console.log(guests)
       this.renderGuests(guests)
     }
 

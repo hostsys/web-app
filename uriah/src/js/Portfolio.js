@@ -12,60 +12,89 @@ class Portfolio extends HTMLElement {
   connectedCallback() {
     this.innerHTML = html;
 
-    const button = this.querySelector("#crash");
+    this.iframes = new Map()
+    this.urlMap = {
+      'lmb': 'https://leeannmariebeauty.com',
+      'russo': 'https://www.russocorp.com',
+      'cloud': 'https://www.cloudtechinc.com',
+      'mojo': 'https://www.mojojoint.com',
+      'imperial': 'https://www.imperialrefresh.com'
+    }
+    this.buttons = document.querySelectorAll('button[id^="load-"]')
+    this.iframeEvent = new CustomEvent('iframe');
 
-    const body = document.querySelector("#contentBody");
-    const elements = body.querySelectorAll("*");
-    function freezeSite(duration) {
-      const start = Date.now();
-      while (Date.now() - start < duration) {}
+    this.init()
+  }
+
+  init() {
+    this.buttons.forEach(button => {
+      const siteKey = button.id.replace('load-', '')
+
+      this.iframes.set(siteKey, {
+        loaded: false,
+        button: button,
+        container: button.closest('div'),
+        url: this.urlMap[siteKey]
+      })
+      button.addEventListener('click', () => this.loadIframe(siteKey))
+    })
+  }
+
+  loadIframe(siteKey) {
+    const site = this.iframes.get(siteKey)
+    if (site.loaded) {
+      this.toggleIframe(siteKey)
+      return
     }
 
-    button.addEventListener("click", () => {
-      freezeSite(3000);
-      const rainbowEvent = new CustomEvent("colorEvent", {
-        detail: { directive: "rainbow" },
-      });
-      window.dispatchEvent(rainbowEvent);
-      const interval = setInterval(() => {
-        elements.forEach((element) => {
-          if (element.id === "bg") return;
+    const iframe = document.createElement('iframe')
+    iframe.classList.add('!h-[600px]')
+    site.container.classList.add('!h-[600px]')
+    iframe.src = site.url
+    site.container.innerHTML = ''
+    site.container.appendChild(iframe)
 
-          const random1 = this.randomInt(-50, 50);
-          const random2 = this.randomInt(-50, 50);
-          const scale = this.randomInt(0.8, 1);
-          const rotation = this.randomInt(3, 5);
-          const leftRight = this.randomInt(0, 1);
+    site.button = document.createElement('button');
+    site.button.classList.add('crtext', 'underline', 'top-2', 'right-2', 'z-[800]', 'bg-scene', 'bg-opacity-20', 'px-2', 'py-1');
+    site.button.textContent = `close ${siteKey} preview`;
+    site.button.addEventListener('click', () => this.toggleIframe(siteKey));
+    site.container.prepend(site.button);
 
-          // Combine all transform properties
-          let transform = `translate(${random1}px, ${random2}px) scale(${scale})`;
-          // let transform = `scale(${scale})`;
+    site.loaded = true
+    site.iframe = iframe
+    this.scrollTo(siteKey)
+    window.dispatchEvent(this.iframeEvent)
 
-          if (leftRight > 0.5) {
-            transform += ` rotate(${rotation}deg)`;
-          } else {
-            transform += ` rotate(-${rotation}deg)`;
-          }
-
-          element.style.transform = transform;
-        });
-      }, 361); // Loop every 500ms (0.5 seconds)
-      setTimeout(() => {
-        while (true) {
-          for (let i = 99; i === i; i *= i) {
-            console.log(i);
-          }
-        }
-        console.log("BANG, you're dead");
-      }, 3000);
-    });
   }
 
-  randomInt(min, max) {
-    return Math.random() * (max - min) + min;
+  scrollTo(siteKey) {
+    const site = this.iframes.get(siteKey)
+    const view = document.getElementById('view')
+
+    view.scrollTo({ top: site.container.offsetTop - view.offsetTop })
+
   }
 
-  disconnectedCallback() {}
+  toggleIframe(siteKey) {
+    const site = this.iframes.get(siteKey)
+
+    if (!site.loaded)
+      return
+    if (site.iframe.style.display === 'none') {
+      site.iframe.style.display = ''
+      site.container.classList.add('!h-[600px]')
+      site.button.textContent = `close ${siteKey} preview`
+      this.scrollTo(siteKey)
+    } else {
+      site.iframe.style.display = "none"
+      site.container.classList.remove('!h-[600px]')
+      site.button.textContent = `re-open ${siteKey} preview`
+    }
+    window.dispatchEvent(this.iframeEvent)
+
+  }
+
+  disconnectedCallback() { }
 }
 
 customElements.define(Portfolio.tagName, Portfolio);

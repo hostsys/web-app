@@ -5,11 +5,11 @@ const html = `
   <!-- music player -->
  <div
         id="music-container"
-        class="group/container flex max-h-20 rounded-sm border-4 border-primary border-opacity-80 duration-300 hover:border-opacity-100 md:max-h-28"
+        class="group/container flex max-h-24 rounded-sm border-4 border-primary border-opacity-80 duration-300 hover:border-opacity-100 md:max-h-32"
     >
         <div
             id="img-container"
-            class="group/tooltip relative flex h-20 w-20 flex-shrink-0 p-1 pb-2 md:h-full md:w-28 md:pb-1"
+            class="group/tooltip relative flex w-20 flex-shrink-0 p-1 pb-2 md:h-full md:w-28 md:pb-1"
         >
             <img
                 src="https://media.tenor.com/kxefu8OQcD8AAAAC/loli-anime.gif"
@@ -66,7 +66,7 @@ const html = `
                 <div id="title" ref="title" class="md:text-md text-nowrap text-sm">
                     {{ songsList[index].title }}
                 </div>
-                <h4 id="spotify-link" class="crtext invisible text-sm underline md:visible">Spotify</h4>
+                <a id="external-link" target="_blank" rel="noopener noreferrer" class="crtext invisible text-sm underline md:visible">external link</a>
             </div>
             <div
                 id="music-progress"
@@ -176,6 +176,7 @@ const playIcon = document.querySelector(".play-icon");
 const pauseIcon = document.querySelector(".pause-icon");
 
 const titleElement = document.getElementById("title");
+const linkElement = document.getElementById("external-link")
 const mobileTitle = document.getElementById("mobile-title");
 const coverElements = document.querySelectorAll("#cover, #cover-tooltip");
 
@@ -271,18 +272,6 @@ volumeButtons.forEach((item) => {
     btnTexts.forEach((p) => {
       p.classList.remove("underline");
     });
-
-    /*  item
-        .querySelector("p")
-        .classList.add(
-          "underline",
-          "decoration-4",
-          "decoration-dotted",
-          "decoration-secondary",
-          "underline-offset-2"
-        );
-   */
-    // navSfx.cloneAndPlay();
 
     switch (button) {
       case "volume-0":
@@ -470,8 +459,9 @@ function loadSong() {
   currentSong.musicFile.addEventListener("timeupdate", updateProgress);
   currentSong.musicFile.volume = volume;
 
-  titleElement.innerHTML = currentSong.title;
-  mobileTitle.innerHTML = currentSong.title;
+  titleElement.innerText = currentSong.title;
+  linkElement.href = currentSong.spotifyLink
+  mobileTitle.innerText = currentSong.title;
   coverElements.forEach((e) => {
     e.src = currentSong.coverArt + `?date=${Date.now()}`;
   });

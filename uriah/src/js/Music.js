@@ -15,12 +15,24 @@ class Music extends HTMLElement {
   connectedCallback() {
     this.innerHTML = html;
 
+    this.songs = null
     this.songs = JSON.parse(sessionStorage.getItem("songs"));
     window.addEventListener("newSong", (event) =>
       this.handleNewSong(event.detail.id, event.detail.status)
     );
+    this.getSongs()
 
-    this.renderSongs();
+  }
+
+  getSongs() {
+    this.songs = JSON.parse(sessionStorage.getItem("songs"));
+    if (!this.songs) {
+      setTimeout(() => {
+        this.getSongs()
+      }, 250)
+    } else {
+      this.renderSongs();
+    }
   }
 
   renderSongs() {
@@ -49,7 +61,7 @@ class Music extends HTMLElement {
         this.changeSong(song.id);
       });
 
-      const spotify = songDiv.querySelector("#spotify");
+      const spotify = songDiv.querySelector("#external");
       spotify.href = song.spotifyLink;
 
       const liner = songDiv.querySelector("#one-liner");

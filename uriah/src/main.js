@@ -1009,6 +1009,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ensureScroll();
   });
 
+  window.addEventListener("iframe", (e) => {
+    ensureScroll();
+  });
+
   // this is so fucking jank
   function ensureScroll() {
     percent.style.opacity = "0";
