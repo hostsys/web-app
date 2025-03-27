@@ -9,7 +9,7 @@ const html = `
     >
         <div
             id="img-container"
-            class="group/tooltip relative flex w-20 flex-shrink-0 p-1 pb-2 md:h-full md:w-28 md:pb-1"
+            class="group/tooltip relative flex w-20 flex-shrink-0 p-1 pb-1 md:h-full md:w-28 md:pb-1"
         >
             <img
                 src="https://media.tenor.com/kxefu8OQcD8AAAAC/loli-anime.gif"

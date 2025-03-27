@@ -25,23 +25,51 @@ class Router {
       history.pushState({}, "", e.target.href);
       this.handleRoute(window.location.pathname);
     });
+
+    window.addEventListener('navigate', (e) => {
+      console.log(e)
+      const route = e.detail.route
+      this.handleRoute(route)
+    })
   }
 
   handleRoute(route) {
     if (route.length === 0) route = "/";
+    if (route.length > 1 && route.endsWith('/'))
+      route = route.slice(0, -1)
     if (this.routes[route]) {
       this.loadComponent(route);
-    } else {
-      this.loadComponent("404");
+      return
     }
+    const segments = route.split('/').filter(Boolean)
+    const potentialDynamicRoutes = Object.keys(this.routes).filter(route => route.includes(':'))
+    let match
+
+    potentialDynamicRoutes.forEach((dynamicRoute) => {
+      const dynamicSegments = dynamicRoute.split('/').filter(Boolean)
+
+      if (dynamicSegments.length === segments.length && dynamicSegments[0] === segments[0]) {
+        match = true
+        const args = segments[1]
+
+        this.loadComponent(dynamicRoute, args)
+        return
+      }
+    })
+
+    if (!match)
+      this.loadComponent("404");
   }
 
-  async loadComponent(route) {
+  async loadComponent(route, args = null) {
     window.dispatchEvent(new CustomEvent("navEvent"));
     const view = document.getElementById("view");
     const { default: Component } = await this.routes[route].component();
-    document.title = "uriah's " + this.routes[route].title;
+
+    document.title = route === 'read-writes/:id' && args ? `uriah's post #${args}` : `uriah's ${this.routes[route].title}`;
+
     const component = document.createElement(Component.tagName);
+    component.args = args
 
     view.classList.add("opacity-0", "translate-y-[100px]");
     setTimeout(() => {
@@ -80,6 +108,14 @@ const routes = {
   "/guest-book": {
     component: () => import("../src/js/GuestBook"),
     title: "guest-book",
+  },
+  "/read-writes": {
+    component: () => import("../src/js/ReadWrites"),
+    title: "read-writes",
+  },
+  "/read-writes/:id": {
+    component: () => import("../src/js/Read"),
+    title: "post",
   },
   // "/template": {
   //   component: () => import("../src/js/componentTemplate"),

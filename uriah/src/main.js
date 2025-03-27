@@ -828,28 +828,27 @@ document.addEventListener("DOMContentLoaded", () => {
             break;
 
           case "portfolio":
-            // eyeMaterial.color.set("blue");
             switchModel('eyeball-portfolio.glb')
             break;
 
           case "music":
-            // eyeMaterial.color.set("yellow");
             switchModel('eyeball-music.glb')
             break;
 
           case "guest-book":
-            // eyeMaterial.color.set("green");
             switchModel('eyeball-guest.glb')
             break;
 
           case "the-box":
-            // eyeMaterial.color.set("orange");
             switchModel('eyeball-box.glb')
             break;
 
           case "controls":
-            // eyeMaterial.color.set("cyan");
             switchModel('eyeball-controls.glb')
+            break;
+
+          case "read-writes":
+            switchModel('eyeball-writes.glb')
             break;
 
           default:

@@ -1,5 +1,6 @@
 import { sfx } from "./sfx.js";
 import html from "../pages/music.html";
+import starTexture from "../../assets/star-texture.png";
 
 class Music extends HTMLElement {
   static get tagName() {
@@ -22,6 +23,7 @@ class Music extends HTMLElement {
     );
     this.getSongs()
 
+    document.documentElement.style.setProperty('--star-texture-url', `url(${starTexture})`);
   }
 
   getSongs() {

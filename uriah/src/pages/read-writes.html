@@ -1,0 +1,53 @@
+<div
+  class="w-full md:h-[calc(100%-0.5rem)] lg:mt-2 grid md:grid-cols-3 lg:gap-4 transition-colors duration-300"
+>
+  <div class="w-full flex flex-col col-span-2">
+    <div class="w-full flex border-b-2 border-primary">
+      <h1 class="text-lg border-r-2 border-l-2 px-4 border-primary w-min text-nowrap">writes</h1>
+      <button id="random-post" class="ml-auto text-lg crtext underline border-r-2 border-l-2 px-4 border-primary w-min text-nowrap">random</button>
+    </div>
+    <div id="posts-container" class="transition-all pt-2 flex flex-col gap-2 overflow-auto">
+    </div>
+  </div>
+  <template id="post-template">
+    <div
+      class="w-full h-min transition-all duration-300 backdrop-blur-sm border-2 border-primary border-opacity-80 hover:border-opacity-100 rounded-xs gap-0 p-3 pt-2 flex flex-col"
+    >
+      <div
+        class=" transition-colors duration-300 col-span-5 flex gap-2 "
+      >
+        <a id="post-title" href="" class="crtext max-md:text-base underline text-lg"></a>
+        <p id="post-date" class="text-right text-sm ml-auto"></p>
+      </div>
+      <div
+        id="post-excerpt"
+        class="max-md:text-xs transition-colors duration-300 text-sm flex bg-primary/10 p-1 lg:p-2 rounded-xs"
+      >
+      </div>
+    </div>
+  </template>
+  <div class="w-full flex flex-col max-md:mt-4">
+    <div class="w-full border-b-2 border-primary">
+      <h1 class="border-r-2 border-l-2 px-4 border-primary w-min text-nowrap text-lg">thoughts</h1>
+    </div>
+    <div id="thoughts-container" class=" border-l-2 border-primary h-full pt-2 px-2 transition-all flex flex-col gap-2 overflow-auto">
+    </div>
+    <template id="thoughts-template">
+      <div
+        class="w-full h-min transition-all duration-300 backdrop-blur-sm bg-primary/10 p-2 rounded-xs gap-0 flex flex-col"
+      >
+        <div
+          class=" transition-colors duration-300 col-span-5 flex gap-2 "
+        >
+          <h3 id="thought-title" class="max-md:text-base text-lg"></h3>
+          <p id="thought-date" class="text-right text-sm ml-auto"></p>
+        </div>
+        <div
+          id="thought"
+          class="max-md:text-xs transition-colors duration-300 text-sm overflow-auto flex rounded-xs"
+        >
+        </div>
+      </div>
+    </template>
+  </div>
+</div>

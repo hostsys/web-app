@@ -42,7 +42,7 @@
 
 <div class="flex flex-col h-full md:justify-center md:items-center">
   <h1 class="text-center text-xl">this is where the box lives</h1>
-  <label for="color-picker" class="flex justify-center">
+  <label for="color-picker" class="flex relative justify-center">
     <div
       id="the-box-box"
       class="group/box my-16 h-36 w-36 md:h-60 md:w-60 rotate-45 duration-500 transition-all cursor-active bg-box"
@@ -52,6 +52,7 @@
         class="sfx m-3 w-min whitespace-nowrap bg-scene px-2 opacity-0 group-hover/box:opacity-80"
       ></p>
     </div>
+      <p id="click-me" class="text-primary bg-scene/40 px-2 pointer-events-none absolute top-[50%] crtext stroke-black underline">click me</p>
   </label>
   <input id="color-picker" type="color" class="absolute opacity-0" />
   <p id="box-body" class="text-center">
@@ -74,4 +75,31 @@
     left: 0;
     /* z-index: 10; */
   }
+
+  #click-me {
+    animation: fadeaway 3000ms ease forwards;
+  }
+
+@keyframes fadeaway{
+  0% {
+    transform: scale(100%);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(110%);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(100%);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(110%);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(100%);
+    opacity: 0;
+  }
+}
 </style>

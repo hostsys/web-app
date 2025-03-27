@@ -24,6 +24,9 @@
   input:active {
     @apply cursor-stabbing;
   }
+  h1 {
+    @apply text-xl;
+  }
   /* *:active
         :not(a:active, #cover, button:active, router-link:active, input:active, #music-progress) {
         @apply cursor-stab;

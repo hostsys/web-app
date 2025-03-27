@@ -14,6 +14,7 @@ const html = `
   <div id="hcol3" class="crtext flex flex-col gap-0 pl-4 text-left max-sm:text-sm md:pl-14">
     <a class="px-1" href="/music" id="music">music</a> 
     <a class="px-1" href="/guest-book" id="guest-book">guest book</a>
+    <a class="px-1" href="/read-writes" id="read-writes">writes</a>
     <a class="px-1" href="/the-box" id="the-box">box</a>
   </div>
 `;

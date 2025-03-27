@@ -1,10 +1,10 @@
 <div
   class="w-full md:h-full grid grid-cols-1 md:grid-cols-2 md:gap-4 transition-colors duration-300"
 >
-  <div class="max-md:order-2 overflow-auto" id="music-container"></div>
+  <div class="max-md:order-2 gap-2 flex flex-col overflow-auto" id="music-container"></div>
   <template id="song-template">
     <div
-      class="w-full transition-colors duration-300 backdrop-blur-sm border-4 border-opacity-80 hover:border-opacity-100 border-primary rounded-xs md:my-2 gap-2 flex"
+      class="w-full transition-colors duration-300 backdrop-blur-sm border-4 border-opacity-80 hover:border-opacity-100 border-primary rounded-xs gap-2 flex"
     >
       <img
         id="cover-art"
@@ -26,14 +26,8 @@
         <div
           class="row-span-1 transition-colors duration-300 text-sm col-span-9 flex gap-2 items-start"
         >
-          <a target="_blank" rel="noopener noreferrer" class="underline crtext" id="external">external link</a>
-          <div
-            class="border transition-colors duration-300 border-primary border-l-2 h-8"
-          ></div>
-          <h3 class="max-lg:hidden" id="one-liner"></h3>
-          <div
-            class="border transition-colors duration-300 border-primary max-lg:hidden border-l-2 h-8"
-          ></div>
+          <a target="_blank" rel="noopener noreferrer" class="underline crtext" id="external">link</a>
+          <h3 class="max-lg:hidden border-x-2 px-2" id="one-liner"></h3>
           <p id="date"></p>
         </div>
       </div>
@@ -48,12 +42,12 @@
 <style>
   #playing-icon {
     image-rendering: pixelated;
-    background-image: url("./images/star-texture.png");
+    background-image: var(--star-texture-url);
     background-size: cover;
-    -webkit-mask-image: url("./images/star-texture.png");
+    -webkit-mask-image: var(--star-texture-url);
     -webkit-mask-mode: alpha;
     -webkit-mask-size: cover;
-    mask-image: url("./images/star-texture.png");
+    mask-image: var(--star-texture-url);
     mask-mode: alpha;
     mask-size: cover;
     background-blend-mode: multiply;

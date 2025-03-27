@@ -43,7 +43,7 @@ document.addEventListener("click", (e) => {
 });
 document.addEventListener("mouseover", (e) => {
   const { target } = e;
-  if (target.matches("a")) {
+  if (target.matches("a") || (target.matches("button") && !target.matches(".vol-btn") && !target.matches(".exempt"))) {
     hoverSfx.cloneAndPlay();
   }
 });
