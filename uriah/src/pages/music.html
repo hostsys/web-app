@@ -10,8 +10,8 @@
         id="cover-art"
         class="cover-art row-span-2 col-span-1 w-24 h-24 p-1 cursor-active active:cursor-stabbing"
       />
-      <div class="w-full my-1 gap-1 md:gap-2 grid grid-cols-10 grid-rows-2">
-        <div class="row-span-1 col-span-9 flex gap-2 items-end">
+      <div class="pt-3 pr-3 w-full md:gap-2 flex-col">
+        <div class="flex gap-2 items-end">
           <button id="play-pause" class="exempt flex gap-2 w-full">
             <img
               id="playing-icon"
@@ -24,10 +24,10 @@
           </button>
         </div>
         <div
-          class="row-span-1 transition-colors duration-300 text-sm col-span-9 flex gap-2 items-start"
+          class="pt-2 transition-colors duration-300 text-sm flex gap-2 items-start"
         >
           <a target="_blank" rel="noopener noreferrer" class="max-lg:hidden underline crtext" id="external">link</a>
-          <h3 class="lg:border-x-2 border-r-2 px-2" id="one-liner"></h3>
+          <h3 class="lg:border-x-2 border-r-2 lg:px-2 max-lg:pr-2 text-xs" id="one-liner"></h3>
           <p id="date"></p>
         </div>
       </div>

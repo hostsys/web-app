@@ -1,7 +1,7 @@
 <div class="w-full md:h-[calc(100%-0.5rem)] lg:mt-2 overflow-auto relative ">
 
   <div
-    id="success" class="opacity-0 flex flex-col transition-all duration-300"
+    id="success" class="opacity-0 flex flex-col lg:items-center transition-all duration-300"
   >
     <div class="w-full flex items-center">
       <h1 class="text-xl py-1" id="post-title"></h1>
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div id="post-content" class="flex flex-col gap-2"></div>
+    <div id="post-content" class="lg:w-1/2 flex flex-col gap-2"></div>
 
   </div>
 
@@ -32,10 +32,18 @@
     font-size: 1.3rem;
     padding-top: 1rem;
   }
+
   #post-content h2 {
-    @apply text-lg
+    @apply text-xl
   }
-  #post-content {
-    @apply bg-red-400
+
+  #post-content a {
+    @apply crtext;
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  #post-content li {
+    padding-left: 15px;
   }
 </style>

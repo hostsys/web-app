@@ -196,9 +196,9 @@ const getMusic = async () => {
         new Song(
           songData.id,
           songData.title,
-          songData.cover_art,
+          songData.cover_art_sizes.thumbnail,
           songData.music_file,
-          songData.release_date,
+          formatDate(songData.release_date),
           songData.spotify_link,
           songData.one_liner,
           songData.order
@@ -222,6 +222,12 @@ const getMusic = async () => {
   }
 };
 getMusic();
+
+function formatDate(date) {
+  const opts = { month: '2-digit', day: '2-digit', year: '2-digit' }
+  return new Date(date).toLocaleString('en-US', opts);
+  ("en-US", opts)
+}
 
 playBtn.onclick = () => {
   playPauseSong();

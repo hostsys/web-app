@@ -24,6 +24,9 @@ class Music extends HTMLElement {
     this.getSongs()
 
     document.documentElement.style.setProperty('--star-texture-url', `url(${starTexture})`);
+
+    if (this.args)
+      this.findURLSong(this.args)
   }
 
   getSongs() {
@@ -61,6 +64,7 @@ class Music extends HTMLElement {
       button.addEventListener("click", () => {
         sfx("short");
         this.changeSong(song.id);
+        navigator.clipboard.writeText(window.location)
       });
 
       const spotify = songDiv.querySelector("#external");
@@ -76,11 +80,26 @@ class Music extends HTMLElement {
     });
   }
 
+  findURLSong(id) {
+    console.log('songs: ', this.songs)
+    const song = this.songs.find((song) => song.id === parseInt(id))?.id || null
+    if (song)
+      this.changeSong(parseInt(id))
+  }
+
   changeSong(id) {
     const changeSongEvent = new CustomEvent("changeSong", {
       detail: { id },
     });
     window.dispatchEvent(changeSongEvent);
+
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/music/')) {
+      const newPath = currentPath.replace(/\/music\/\d*$/, `/music/${id}`);
+      window.history.pushState({ id: id }, '', newPath);
+    } else {
+      window.history.pushState({ id: id }, '', `/music/${id}`);
+    }
   }
 
   handleNewSong(id, status) {

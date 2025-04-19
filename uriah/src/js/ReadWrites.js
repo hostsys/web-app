@@ -26,6 +26,13 @@ class ReadWrites extends HTMLElement {
   randomPost() {
     const randomPostId = this.postIds[Math.floor(Math.random() * this.postIds.length)]
     window.dispatchEvent(new CustomEvent('navigate', { detail: { route: `/read-writes/${randomPostId}` } }))
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/read-writes/')) {
+      const newPath = currentPath.replace(/\/read-writes\/\d*$/, `/read-writes/${randomPostId}`);
+      window.history.pushState({ id: randomPostId }, '', newPath);
+    } else {
+      window.history.pushState({ id: randomPostId }, '', `/read-writes/${randomPostId}`);
+    }
   }
 
   async getPosts() {

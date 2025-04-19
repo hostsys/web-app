@@ -28,7 +28,7 @@ class Read extends HTMLElement {
         if (!r.ok) throw new Error(`HTTP error ${r.status}`);
         return r.json();
       });
-      console.log(postResponse)
+      console.log(postResponse.content.rendered)
       this.renderPost(postResponse)
     } catch (err) {
       this.failureDiv.classList.add('opacity-100')

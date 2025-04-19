@@ -97,6 +97,10 @@ const routes = {
     component: () => import("../src/js/Music"),
     title: "music",
   },
+  "/music/:id": {
+    component: () => import("../src/js/Music"),
+    title: "post",
+  },
   "/gallery": {
     component: () => import("../src/js/Gallery"),
     title: "gallery",
@@ -116,6 +120,10 @@ const routes = {
   "/read-writes/:id": {
     component: () => import("../src/js/Read"),
     title: "post",
+  },
+  "/secret": {
+    component: () => import("../src/js/Secret"),
+    title: "secret",
   },
   // "/template": {
   //   component: () => import("../src/js/componentTemplate"),

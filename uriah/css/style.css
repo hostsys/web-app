@@ -578,6 +578,10 @@ a:active,
   cursor: url(/cursor/cursor-active-stab.png), pointer;
 }
 
+a {
+  animation: textShadow 1.6s infinite;
+}
+
 h1 {
   font-size: 1.5rem;
 }
@@ -753,10 +757,6 @@ h1 {
   grid-column: span 6 / span 6;
 }
 
-.col-span-9 {
-  grid-column: span 9 / span 9;
-}
-
 .row-span-1 {
   grid-row: span 1 / span 1;
 }
@@ -767,11 +767,6 @@ h1 {
 
 .m-3 {
   margin: 0.75rem;
-}
-
-.my-1 {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
 }
 
 .my-16 {
@@ -797,6 +792,10 @@ h1 {
 
 .mt-2 {
   margin-top: 0.5rem;
+}
+
+.mt-\[35\%\] {
+  margin-top: 35%;
 }
 
 .line-clamp-1 {
@@ -1002,10 +1001,6 @@ h1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-.grid-cols-10 {
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-}
-
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -1016,10 +1011,6 @@ h1 {
 
 .grid-cols-7 {
   grid-template-columns: repeat(7, minmax(0, 1fr));
-}
-
-.grid-rows-2 {
-  grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
 .grid-rows-3 {
@@ -1084,6 +1075,10 @@ h1 {
 
 .place-self-end {
   place-self: end;
+}
+
+.self-center {
+  align-self: center;
 }
 
 .overflow-auto {
@@ -1210,11 +1205,6 @@ h1 {
   background-color: rgb(var(--color-primary) / 0.1);
 }
 
-.bg-red-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1));
-}
-
 .bg-scene {
   --tw-bg-opacity: 1;
   background-color: rgb(var(--color-scene) / var(--tw-bg-opacity, 1));
@@ -1322,6 +1312,10 @@ h1 {
   padding-left: 1rem;
 }
 
+.pr-3 {
+  padding-right: 0.75rem;
+}
+
 .pr-4 {
   padding-right: 1rem;
 }
@@ -1332,6 +1326,14 @@ h1 {
 
 .pt-2 {
   padding-top: 0.5rem;
+}
+
+.pt-3 {
+  padding-top: 0.75rem;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
 }
 
 .text-left {
@@ -1368,6 +1370,10 @@ h1 {
 
 .text-xl {
   font-size: 1.5rem;
+}
+
+.text-xs {
+  font-size: 0.8rem;
 }
 
 .text-orange-400 {
@@ -2070,9 +2076,8 @@ input,
     display: none;
   }
 
-  .max-lg\:border-x-2 {
-    border-left-width: 2px;
-    border-right-width: 2px;
+  .max-lg\:pr-2 {
+    padding-right: 0.5rem;
   }
 }
 
@@ -2103,6 +2108,10 @@ input,
 
   .max-md\:text-sm {
     font-size: 0.9rem;
+  }
+
+  .max-md\:text-xs {
+    font-size: 0.8rem;
   }
 }
 
@@ -2202,6 +2211,10 @@ input,
     gap: 1rem;
   }
 
+  .md\:overflow-auto {
+    overflow: auto;
+  }
+
   .md\:p-5 {
     padding: 1.25rem;
   }
@@ -2232,6 +2245,14 @@ input,
     display: none;
   }
 
+  .lg\:w-1\/2 {
+    width: 50%;
+  }
+
+  .lg\:items-center {
+    align-items: center;
+  }
+
   .lg\:gap-2 {
     gap: 0.5rem;
   }
@@ -2251,5 +2272,18 @@ input,
 
   .lg\:p-5 {
     padding: 1.25rem;
+  }
+
+  .lg\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .lg\:pb-0 {
+    padding-bottom: 0px;
+  }
+
+  .lg\:pb-2 {
+    padding-bottom: 0.5rem;
   }
 }

@@ -24,6 +24,9 @@
   input:active {
     @apply cursor-stabbing;
   }
+  a {
+    @apply crtext;
+  }
   h1 {
     @apply text-xl;
   }

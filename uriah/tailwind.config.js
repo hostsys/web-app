@@ -14,6 +14,7 @@ module.exports = {
       pixel: ["Birch Leaf"],
     },
     fontSize: {
+      xs: "0.8rem",
       sm: "0.9rem",
       base: "1.1rem",
       lg: "1.3rem",
