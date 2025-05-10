@@ -40,6 +40,17 @@ class Music extends HTMLElement {
     }
   }
 
+  getCurrentSong() {
+    if (this.currentSong)
+      return null
+    const currentSongData = sessionStorage.getItem('currentSong')
+    if (!currentSongData)
+      return null
+
+    this.currentSong = currentSongData.id
+    this.songStatus = currentSongData.status
+  }
+
   renderSongs() {
     const template = this.querySelector("#song-template");
     const container = this.querySelector("#music-container");

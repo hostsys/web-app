@@ -188,9 +188,9 @@ input,
   /* backdrop-filter: opacity(100%); */
   background: no-repeat
     linear-gradient(
-      rgba(10, 0, 0, 0.15) 0%,
-      rgba(0, 10, 0, 0.5) 50%,
-      rgba(0, 0, 10, 0.15) 100%
+      rgba(10, 0, 0, 0.03) 0%,
+      rgba(0, 10, 0, 0.01) 50%,
+      rgba(0, 0, 10, 0.03) 100%
     );
   z-index: 998;
   animation: 3s scanLine infinite linear;

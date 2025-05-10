@@ -353,7 +353,7 @@ function updateProgress() {
   progressBar.style.width = `${progressPercent}%`;
 
   if (progressPercent === 100) {
-    setTimeout(changeSong(1), 250);
+    setTimeout(changeSong(1), 500)
   }
 }
 
@@ -428,6 +428,7 @@ function playPauseSong() {
         status: "paused",
       },
     });
+    localStorage.setItem(currentSong, { id: songs[currentSongIndex].id, status: "paused" })
     window.dispatchEvent(newSongEvent);
   } else {
     currentSong.play();
@@ -439,6 +440,7 @@ function playPauseSong() {
         status: "playing",
       },
     });
+    localStorage.setItem('currentSong', { id: songs[currentSongIndex].id, status: "playing" })
     window.dispatchEvent(newSongEvent);
   }
 }
@@ -471,5 +473,6 @@ function loadSong() {
   coverElements.forEach((e) => {
     e.src = currentSong.coverArt + `?date=${Date.now()}`;
   });
+
   setVolumeButton(volume);
 }

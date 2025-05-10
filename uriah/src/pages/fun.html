@@ -1,0 +1,64 @@
+<div
+  class="w-full flex-col flex gap-2 md:gap-4 transition-colors duration-300"
+>
+  this page is supposed to be fun
+  <div id="sorting-div" class="items-end w-full p-2 md:p-4 gap-1 md:gap-2 h-[30vh] border-2 border-primary flex overflow-auto"></div>
+  <div class="w-full flex gap-4 overflow-auto justify-center"> 
+    <button id="init-sort" class=" px-2 py-1 border-2 border-primary/80 hover:border-primary/100">shuffle</button>
+    <div class="flex gap-1 items-center">
+    <input id="sort-length" type="number" placeholder="bars" value="8" class="max-w-16 text-center backdrop-blur-sm bg-scene px-2 py-1 border-opacity-80 hover:border-opacity-100 focus:border-opacity-100 border-4 border-dotted border-primary bg-opacity-0" />
+      <p class="md:text-lg">
+        bars 
+      </p>
+    </div>
+    <div class="flex gap-1 items-center">
+    <input id="sort-speed" type="number" placeholder="speed" value="100" class="max-w-16 text-center backdrop-blur-sm bg-scene px-2 py-1 border-opacity-80 hover:border-opacity-100 focus:border-opacity-100 border-4 border-dotted border-primary bg-opacity-0" />
+      <p class="md:text-lg">
+        delay (ms)
+      </p>
+    </div>
+  </div>
+  <div class="flex w-full overflow-auto gap-1 md:gap-2 justify-center">
+    <button id="bubble-sort" class=" px-2 py-1 border-2 border-primary/80 hover:border-primary/100">bubble</button>
+    <button id="selection-sort" class=" px-2 py-1 border-2 border-primary/80 hover:border-primary/100">selection</button>
+    <button id="insertion-sort" class=" px-2 py-1 border-2 border-primary/80 hover:border-primary/100">insertion</button>
+    <button id="merge-sort" class=" px-2 py-1 border-2 border-primary/80 hover:border-primary/100">merge</button>
+    <button id="quick-sort" class=" px-2 py-1 border-2 border-primary/80 hover:border-primary/100">quick</button>
+  </div>
+  <div class="flex w-full p-2 backdrop-blur-sm" id="description"></div>
+
+</div>
+
+<style>
+input[type="number"] {
+  -webkit-appearance: textfield;
+     -moz-appearance: textfield;
+          appearance: textfield;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+}
+.bar {
+  position: relative;
+  overflow: visible;
+}
+
+.bar span {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  font-size: 0.8rem;
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+  color: black;
+
+  /* Improves contrast on white bars */
+  text-shadow: 
+    0 0 0px white,
+    0 0 2px white;
+
+}
+</style>

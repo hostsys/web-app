@@ -4,6 +4,7 @@ const html = `
     <a class="px-1" href="/" id="home">home</a>
     <a class="px-1 "href="/portfolio" id="portfolio">portfolio</a>
     <a class="px-1" href="/controls" id="controls">controls</a>
+    <a class="px-1" href="/fun" id="fun">fun</a>
   </div>
   <!-- column 2 -->
   <div id="hcol2" class="flex justify-center">

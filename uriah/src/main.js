@@ -851,6 +851,10 @@ document.addEventListener("DOMContentLoaded", () => {
             switchModel('eyeball-writes.glb')
             break;
 
+          case "fun":
+            switchModel('eyeball-fun.glb')
+            break;
+
           default:
           // eyeMaterial.color.set("white");
         }
@@ -1009,6 +1013,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   window.addEventListener("iframe", (e) => {
+    ensureScroll();
+  });
+
+  window.addEventListener("scroll", (e) => {
     ensureScroll();
   });
 

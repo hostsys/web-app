@@ -93,6 +93,10 @@ const routes = {
     component: () => import("../src/js/Controls"),
     title: "controls",
   },
+  "/fun": {
+    component: () => import("../src/js/Fun"),
+    title: "fun",
+  },
   "/music": {
     component: () => import("../src/js/Music"),
     title: "music",
