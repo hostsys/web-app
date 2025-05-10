@@ -46,7 +46,7 @@ class Fun extends HTMLElement {
 
   playBoop(playbackRate = 2) {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)()
-    fetch("../../public/sfx/boop.mp3")
+    fetch("/sfx/boop.mp3")
       .then(response => response.arrayBuffer())
       .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
       .then(audioBuffer => {
