@@ -7,6 +7,8 @@ class Fun extends HTMLElement {
   }
   constructor() {
     super();
+    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    this.boopBuffer = null;
   }
 
   connectedCallback() {
@@ -34,6 +36,7 @@ class Fun extends HTMLElement {
     this.Descriptions.set('merge', "my favorite. merge sort is both more sophisticated and efficient than the previous three, however, it will appear slower here for demonstration purposes. merge sort works using recursion and the 'divide and conquer' strategy. the 'division' involves calling itself repeatedly (aka recursively) to split halves, and then split those halves, on and on until what's left is indivisible, in a way that is reminiscent of tree roots. it then 'conquers/combines' by merging its way back up each fragment, sorting as it goes")
     this.Descriptions.set('quick', "quick sort is usually the fastest/most efficient, but as with the merge demo, it has been slowed for better visualization. similar to merge sort, it uses recursion and the 'divide and conquer' strategy. it works by selecting a 'pivot' value (in this case, the last value). it then partitions the array by rearranging values so that everything smaller than the pivot is on the left, and everything larger on the right. this is done in place (as opposed to merge sort's separate lists) using two indices, where one defines the bounds of smaller values, and the other incremements up the list. after partitioning, the correct position of the pivot is now known and swapped to, as it is necessarily to the right of the partion of smaller values. this process is repeated recursively for the portions left and right of the pivot until indivisible, at which point each each value has had it's turn as 'pivot,' and has therefore found its correct position")
 
+    this.preloadBoop();
     this.createBars()
 
     this.initBtn.addEventListener('click', () => this.createBars())
@@ -44,23 +47,31 @@ class Fun extends HTMLElement {
     this.qckSort.addEventListener('click', () => this.quickSortBars())
   }
 
-  playBoop(playbackRate = 2) {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+  preloadBoop() {
     fetch("/sfx/boop.mp3")
       .then(response => response.arrayBuffer())
-      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+      .then(arrayBuffer => this.audioContext.decodeAudioData(arrayBuffer))
       .then(audioBuffer => {
-        const source = audioContext.createBufferSource()
-        source.buffer = audioBuffer
-
-        // Playback rate controls pitch and speed
-        source.playbackRate.value = playbackRate
-
-        source.connect(audioContext.destination)
-        source.start()
+        this.boopBuffer = audioBuffer; // Store the decoded buffer
+        console.log("Boop sound loaded successfully");
       })
-      .catch(err => console.error("Failed to play boop:", err))
+      .catch(err => console.error("Failed to load boop sound:", err));
   }
+
+  playBoop(playbackRate = 2) {
+    if (!this.boopBuffer) {
+      console.log("Buffer not ready, loading...");
+      this.preloadBoop();
+      return;
+    }
+
+    const source = this.audioContext.createBufferSource();
+    source.buffer = this.boopBuffer;
+    source.playbackRate.value = playbackRate;
+    source.connect(this.audioContext.destination);
+    source.start();
+  }
+
   createBars() {
     if (this.isSorting)
       return
