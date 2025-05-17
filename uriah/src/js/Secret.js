@@ -12,6 +12,7 @@ class Secret extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = html;
+    this.scrollEvent = new CustomEvent('scroll');
 
     this.input = this.querySelector('#password')
     this.notification = this.querySelector('#password-notif')
@@ -50,8 +51,8 @@ class Secret extends HTMLElement {
       content.innerHTML = passJson.content;
       title.textContent = passJson.title;
       date.textContent = passJson.date;
+      window.dispatchEvent(this.scrollEvent)
 
-      console.log('Title bar now visible');
     } else {
       this.notificationText.innerText = passJson.status;
       this.notification.showModal();

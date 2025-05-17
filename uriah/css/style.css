@@ -1382,6 +1382,10 @@ h1 {
   text-align: right;
 }
 
+.align-middle {
+  vertical-align: middle;
+}
+
 .font-pixel {
   font-family: Birch Leaf;
 }
