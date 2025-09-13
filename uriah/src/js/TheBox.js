@@ -88,24 +88,21 @@ class TheBox extends HTMLElement {
   }
 
   async fetchLocationData() {
-    const ipResponse = await fetch("https://api.ipify.org?format=json");
-
-    const ipData = await ipResponse.json();
-    const ip = ipData.ip;
+    const ipResponse = await fetch("https://ipwho.is/")
+    const resData = await ipResponse.json()
+    const ip = resData.ip;
 
     const ipReplaceElement = document.getElementById("box-body");
     this.replaceInText(ipReplaceElement, "ipAddress", ip);
 
-    const locationResponse = await fetch(`https://freeipapi.com/api/json/${ip}`);
-    const locationData = await locationResponse.json();
-    const locationCity = locationData.cityName.toLowerCase();
+    const locationCity = resData.city.toLowerCase();
 
     const locationReplaceElement = document.getElementById("box-body");
     this.replaceInText(locationReplaceElement, "locationData", locationCity);
 
     const data = {
       ip: ip,
-      coords: `${locationData.latitude},${locationData.longitude}`,
+      coords: `${resData.latitude},${resData.longitude}`,
     };
 
     return data;

@@ -53,14 +53,12 @@ class Fun extends HTMLElement {
       .then(arrayBuffer => this.audioContext.decodeAudioData(arrayBuffer))
       .then(audioBuffer => {
         this.boopBuffer = audioBuffer; // Store the decoded buffer
-        console.log("Boop sound loaded successfully");
       })
       .catch(err => console.error("Failed to load boop sound:", err));
   }
 
   playBoop(playbackRate = 2) {
     if (!this.boopBuffer) {
-      console.log("Buffer not ready, loading...");
       this.preloadBoop();
       return;
     }

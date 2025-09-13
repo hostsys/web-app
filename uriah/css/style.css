@@ -794,10 +794,6 @@ h1 {
   margin-top: 0.5rem;
 }
 
-.mt-\[35\%\] {
-  margin-top: 35%;
-}
-
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
@@ -1380,10 +1376,6 @@ h1 {
 
 .text-right {
   text-align: right;
-}
-
-.align-middle {
-  vertical-align: middle;
 }
 
 .font-pixel {
